@@ -14,9 +14,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .container {
-  height: 100vh;
+  height: 110vh;
   margin: 0 auto;
   max-width: 550px;
   border-left: 1px solid rgba(79, 90, 112, 0.24);
