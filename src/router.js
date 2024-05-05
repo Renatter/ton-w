@@ -7,6 +7,7 @@ import CreatePage from "./view/create-page.vue"
 import WalletPage from "./view/wallet-page.vue"
 import HistoryPage from "./view/history-page.vue"
 import SettingPage from "./view/settings-page.vue"
+import ToncPage from "./view/ton-coin-page.vue"
 import RecoveryPage from "./view/recovery-page.vue"
 const router = createRouter({
     history: createWebHistory(),
@@ -17,6 +18,10 @@ const router = createRouter({
         {
             path: '/settings',
             component: SettingPage,
+        },
+        {
+            path: '/ton-coin',
+            component: ToncPage,
         },
         {
             path: '/create',
