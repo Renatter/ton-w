@@ -299,6 +299,7 @@
       <p class="text-[black] wor text-center font-sm">{{ walletAddres }}</p>
     </div>
     <button
+      @click="copyToClipboard"
       class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px] ml-[70px]"
     >
       <svg
@@ -464,6 +465,19 @@ export default {
     },
   },
   methods: {
+    copyToClipboard() {
+      const textToCopy = this.walletAddres; // Замените это своим текстом или данными
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          console.log("Текст скопирован в буфер обмена");
+          // Можно добавить обратную связь для пользователя, например, уведомление или изменение текста кнопки
+        })
+        .catch((err) => {
+          console.error("Не удалось скопировать текст: ", err);
+          // Можно добавить обработку ошибки, если копирование не удалось
+        });
+    },
     sendAction() {
       if (this.formattedBalance < 0) {
         // Если баланс отрицательный, не продолжаем

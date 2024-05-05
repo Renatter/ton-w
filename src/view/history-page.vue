@@ -3,7 +3,9 @@
     <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
     <div class="pb-[100px]">
       <div class="history-container">
+        <div v-if="isLoading" class="loader"></div>
         <div
+          v-else
           class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
           v-for="i in resol()"
           @click="selectItem(i)"
@@ -192,6 +194,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      isLoading: true,
       selectedItem: null,
       showCreateWallet: false,
       phras:
@@ -267,6 +270,7 @@ export default {
         limit: 10,
         archival: true,
       };
+      this.isLoading = false;
       const headers = {
         accept: "application/json",
         "X-API-Key":
@@ -369,6 +373,46 @@ export default {
 @media (max-height: 772px) {
   .ht {
     height: 100%;
+  }
+}
+.loader {
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  background-color: rgba(255, 255, 255, 0.7); /* Прозрачный серый фон */
+  z-index: 9999; /* Выше других элементов */
+}
+
+.loader::after {
+  content: "Загрузка...";
+  font-size: 18px;
+  color: #333; /* Цвет текста */
+  margin-left: 10px; /* Небольшое расстояние между текстом и индикатором загрузки */
+}
+
+/* Анимированный индикатор загрузки */
+.loader:after {
+  content: "";
+  display: inline-block;
+  width: 24px; /* Ширина индикатора */
+  height: 24px; /* Высота индикатора */
+  margin-top: 35px;
+  border-radius: 50%;
+  border: 4px solid #333; /* Цвет индикатора */
+  border-color: #333 transparent #333 transparent;
+  animation: loaderAnimation 1.2s linear infinite; /* Анимация вращения */
+}
+
+@keyframes loaderAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
