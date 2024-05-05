@@ -80,6 +80,26 @@
         </div>
       </div>
     </router-link>
+
+    <router-link to="/usdt-coin">
+      <div
+        class="w-[100%] h-[76px] bg-[#1D2633] rounded-[20px] p-[1rem] flex items-center pl-[10px] justify-between mt-[30px]"
+      >
+        <div class="flex gap-[15px]">
+          <img width="56px" height="56px" src="../assets/tether-usdt-seeklogo.svg" alt="" />
+          <div>
+            <p class="font-bold">USDT</p>
+            <p>
+              <span class="gr">$ 1.01</span>
+              <span class="text-[#55d45f] ml-[15px]">+0.01%</span>
+            </p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold">{{ (userWallets.balance * 5.75).toFixed(2) }} USDT</p>
+        </div>
+      </div>
+    </router-link>
   </div>
   <div
     v-if="showCreateWallet && !count"
