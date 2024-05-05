@@ -99,7 +99,7 @@
   </div>
   <div
     v-if="showCreateWallet"
-    class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] bottom-0 create-wallet-animation absolute w-[520px] p-[1rem] flex flex-col justify-center items-center"
+    class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] left-0 bottom-0 create-wallet-animation absolute w-[100%] p-[1rem] flex flex-col justify-center items-center"
   >
     <!-- Используйте изображение как фоновое изображение -->
     <div class="">
@@ -110,7 +110,7 @@
         x
       </p>
       <div
-        class="c ml-[180px] w-[100px] h-[100px] bg-center bg-no-repeat bg-cover top-[-110px] left-[180px]"
+        class="c ml-[40%] w-[100px] h-[100px] bg-center bg-no-repeat bg-cover"
       >
         <img
           src="https://www.stakingrewards.com/_next/image?url=https%3A%2F%2Fstorage.googleapis.com%2Fstakingrewards-static%2Fimages%2Fassets%2Fproduction%2Fthe-open-network_logo.png&w=2048&q=75"
@@ -140,7 +140,7 @@
 
   <div
     v-if="imports && !passBool"
-    class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] bottom-0 create-wallet-animation top-0 absolute w-[520px] p-[1rem] flex flex-col justify-center items-center"
+    class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] bottom-0 create-wallet-animation left-0 top-0 absolute w-[100%] p-[1rem] flex flex-col justify-center items-center"
   >
     <!-- Используйте изображение как фоновое изображение -->
     <div class="">
@@ -159,7 +159,7 @@
         given to you when you created your wallet.
       </p>
       <div class="flex justify-between flex-wrap gap-[5px]">
-        <div v-for="(phrase, index) in 12" :key="index">
+        <div style="width: 49%" v-for="(phrase, index) in 12" :key="index">
           <input
             type="text"
             v-model="inputs[index]"

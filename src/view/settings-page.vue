@@ -154,7 +154,7 @@
 
     <div
       v-if="showCreateWallet"
-      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 pt-[30px] z-50 px-[10px]"
+      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 pt-[30px] z-50 px-[10px]"
     >
       <p
         @click="showCreateWallet = !showCreateWallet"
@@ -209,7 +209,7 @@
     </div>
     <div
       v-if="isPass"
-      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 pt-[30px] z-50 px-[20px]"
+      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 pt-[30px] z-50 px-[20px]"
     >
       <p
         @click="isPass = !isPass"

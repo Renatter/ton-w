@@ -83,7 +83,7 @@
   </div>
   <div
     v-if="showCreateWallet && !count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[550px] bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Recipient</p>
     <p
@@ -121,14 +121,14 @@
     </div>
     <div
       @click="saveGuestAddress"
-      class="w-[500px] mb-[20px] mx-[25px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute bottom-0"
+      class="w-[100%] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute left-0 bottom-0"
     >
       <p class="text-center font-[600]">Continue</p>
     </div>
   </div>
   <div
     v-if="showCreateWallet && count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[550px] bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Amount</p>
     <p class="text-center gr">To: {{ shortenString(guestAddress) }}</p>
@@ -139,27 +139,31 @@
       x
     </p>
     <div
-      class="bg-[#1D2633] w-[510px] mx-[20px] h-[256px] relative rounded-[23px]"
+      class="bg-[#1D2633] w-[100%] h-[256px] relative rounded-[23px]"
+      style="    display: flex;
+    justify-content: center;
+    align-items: center;"
     >
-      <div class="w-[100px] absolute right-[40%] top-[15px]">
+      <div class="w-[100px] absolute top-[15px]">
         <h1
           class="font-bold px-[1rem] py-[0.5rem] text-white rounded-[23px] text-center bg-[#2E3847]"
         >
           TON
         </h1>
       </div>
-      <div class="pt-[100px] flex items-center ml-[200px]">
+      <div class="flex items-center">
         <input
           v-model="valueSum"
           type="text"
           id="default-input"
-          class="bg-[#1D2633] text-[white] font-bold text-[40px] h-[60px] block w-[50px] focus:border-[#45AEF5]"
+          autofocus
+          class="bg-[#1D2633] touched text-[white] font-bold text-[40px] h-[60px] block w-[70px] focus:border-[#45AEF5]"
         />
         <span class="text-[25px] font-bold gr">TON</span>
       </div>
     </div>
     <div
-      class="flex justify-between w-[500px] mx-[25px] pt-[10px] items-center"
+      class="flex justify-between w-[100%] pt-[10px] items-center"
     >
       <p
         @click="max"
@@ -179,14 +183,14 @@
       :class="{
         'opacity-50 cursor-not-allowed': formattedBalance < 0,
       }"
-      class="w-[500px] mx-[25px] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute bottom-0"
+      class="w-[100%] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute left-0 bottom-0"
     >
       <p class="text-center font-[600]">Continue</p>
     </div>
   </div>
   <div
     v-if="send"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[550px] bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
   >
     <p
       @click="
@@ -197,11 +201,11 @@
       x
     </p>
     <div class="text-center">
-      <img src="../assets/toncoin.svg" class="w-[100px] ml-[220px]" alt="" />
+      <img src="../assets/toncoin.svg" class="w-[100px] ml-[40%]" alt="" />
       <p class="gr pt-[15px] font-bold">Confirm sending</p>
     </div>
     <div
-      class="w-[500px] bg-[#1D2633] mx-[20px] p-[15px] rounded-[20px] mt-[60px]"
+      class="w-[100%] bg-[#1D2633] p-[15px] rounded-[20px] mt-[60px]"
     >
       <div class="flex justify-between mb-[35px]">
         <p class="gr">Recipient</p>
@@ -219,7 +223,7 @@
 
     <div
       v-if="!isWaiting && !isCancelled"
-      class="w-[500px] mx-[25px] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute bottom-0"
+      class="w-[100%] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute left-0 bottom-0"
     >
       <p class="text-center font-[600]" @click="transfer()">Confrim and Send</p>
     </div>
@@ -291,7 +295,12 @@
   </div>
   <div
     v-if="recive"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[550px] px-[130px] bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    style="display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;"
   >
     <p class="text-[white] text-[20px] font-bold text-center pt-[70px]">
       Receive Toncoin
@@ -306,7 +315,7 @@
       Send only Toncoin TON and tokens in TON network to this address, or you
       might lose your funds.
     </p>
-    <div class="bg-[white] rounded-[20px] p-[40px] mt-[30px]">
+    <div class="bg-[white] rounded-[20px] p-[5%] mt-[30px]" style="width: 57%">
       <img src="../assets/qr.png" alt="" />
       <p class="text-[black] wor text-center font-sm">
         {{ userWallets.addres }}
@@ -314,7 +323,7 @@
     </div>
     <button
       @click="copyToClipboard"
-      class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px] ml-[70px]"
+      class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px]"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -333,7 +342,7 @@
     </button>
     <button
       @click="freeTon"
-      class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px] ml-[70px]"
+      class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px]"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
