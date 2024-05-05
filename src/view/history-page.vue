@@ -3,11 +3,11 @@
     <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
     <div class="pb-[100px]">
       <div class="history-container">
-        <div v-if="isLoading" class="loader"></div>
+        <div v-if="isLoading" v-for="i in 5" class="loader mt-[15px]"></div>
         <div
           v-else
           class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
-          v-for="i in resol()"
+          v-for="i in items"
           @click="selectItem(i)"
         >
           <div class="flex">
@@ -19,23 +19,23 @@
             <div class="ml-[30px]">
               <p class="font-bold">{{ i.transactionType }}</p>
               <p class="text-[14px] gr">
-                {{ shortenString(i.address) }}
+                {{ shortenString(i.guesAddress) }}
               </p>
               <p
                 class="bg-[#2E3847] text-center text-[14px] rounded-[25px] py-[8px] px-[10px] mt-[10px]"
               >
-                {{ i.text }}
+                {{ i.comment }}
               </p>
             </div>
           </div>
           <div class="text-right">
             <p
               class="font-bold"
-              :class="{ 'text-green-500': i.transactionType === 'Received' }"
+              :class="{ 'text-green-500': i.text === 'Received' }"
             >
               {{ i.ton }} TON
             </p>
-            <p class="text-[14px] gr">{{ i.date }} PM</p>
+            <p class="text-[14px] gr">{{ i.time }}</p>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@
   </div>
   <div
     v-if="showCreateWallet"
-    class="bg-[#0C1014] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 pt-[30px] z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -133,22 +133,19 @@
       </p>
       <h1 class="font-bold text-[25px]">{{ selectedItem.ton }} TON</h1>
       <p class="mb-[25px]">
-        {{ selectedItem.transactionType }} on
-        {{ formatTimestamp(selectedItem.time) }}, {{ selectedItem.date }}
+        {{ selectedItem.date }}
       </p>
       <div class="rounded-[15px] bg-[#1D2633] mx-[20px]">
         <div class="flex justify-between p-[10px]">
           <p class="gr">
-            {{
-              selectedItem.transactionType === "Sent" ? "Recipient" : "Sender"
-            }}
+            {{ selectedItem.text === "Sent" ? "Recipient" : "Sender" }}
           </p>
-          <p class="font-bold">{{ shortenString(selectedItem.address) }}</p>
+          <p class="font-bold">{{ shortenString(selectedItem.guesAddress) }}</p>
         </div>
         <hr class="mx-[10px] border-[#293242]" />
         <div class="flex justify-between p-[10px]">
           <p class="gr">Transaction</p>
-          <p class="font-bold">{{ shortenString(selectedItem.trId) }}</p>
+          <p class="font-bold">{{ shortenString(selectedItem.transaction) }}</p>
         </div>
         <div class="flex justify-between p-[10px] mt-[20px]">
           <p class="gr">Fee</p>
@@ -157,13 +154,10 @@
         <hr class="mx-[10px] border-[#293242]" />
         <div class="flex justify-between p-[10px]">
           <p class="gr">Comment</p>
-          <p class="font-bold">{{ selectedItem.text }}</p>
+          <p class="font-bold">{{ selectedItem.comment }}</p>
         </div>
       </div>
-      <a
-        target="_blank"
-        :href="'https://testnet.tonviewer.com/transaction/' + selectedItem.trId"
-      >
+      <a>
         <div
           class="mt-[20px] bg-[#2E3847] py-[18px] rounded-[17px] cursor-pointer mx-[20px]"
           @click="showCreateWallet = !showCreateWallet"
@@ -176,20 +170,20 @@
 </template>
 
 <script>
-import { getHttpEndpoint } from "@orbs-network/ton-access";
 import {
-  mnemonicToWalletKey,
-  mnemonicNew,
-  mnemonicToPrivateKey,
-  mnemonicValidate,
-} from "@ton/crypto";
-import {
-  WalletContractV4,
-  TonClient,
-  fromNano,
-  internal,
-  address,
-} from "@ton/ton";
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+  query,
+  where,
+  setDoc,
+  collection,
+  onSnapshot,
+  getDocs,
+  getDocsFromServer,
+} from "firebase/firestore";
+import { db } from "../firebase/firebase";
 import axios from "axios";
 export default {
   data() {
@@ -197,8 +191,6 @@ export default {
       isLoading: true,
       selectedItem: null,
       showCreateWallet: false,
-      phras:
-        "select chuckle upgrade flee process zebra subway cross diamond laundry version own jungle wolf praise rule post pigeon board differ morning memory solar demise",
       coin: [],
       accountAddress: "",
       message: "",
@@ -207,50 +199,10 @@ export default {
       formattedTime: "",
       send: [],
       received: [],
+      items: [],
     };
   },
   methods: {
-    base64ToHex(base64String) {
-      // Декодирование строки из Base64 в байтовый массив
-      var bytes = new Uint8Array(
-        atob(base64String)
-          .split("")
-          .map((char) => char.charCodeAt(0))
-      );
-
-      // Преобразование каждого байта в шестнадцатеричное представление
-      var hexString = Array.from(bytes, (byte) =>
-        byte.toString(16).padStart(2, "0")
-      ).join("");
-
-      return hexString;
-    },
-    formatTimestamp(timestamp) {
-      const date = new Date(timestamp * 1000);
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-
-      const monthName = months[date.getMonth()];
-      const day = date.getDate();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const ampm = hours >= 12 ? "PM" : "AM";
-      const formattedHours = hours % 12 || 12;
-
-      return `${monthName} ${day}`;
-    },
     selectItem(item) {
       this.selectedItem = item;
       this.showCreateWallet = !this.showCreateWallet;
@@ -263,93 +215,22 @@ export default {
       const postfix = str.substring(str.length - postfixLength);
       return `${prefix}...${postfix}`;
     },
-    fetch() {
-      const url = "https://testnet.toncenter.com/api/v2/getTransactions";
-      const params = {
-        address: this.walletAddres,
-        limit: 10,
-        archival: true,
-      };
-      this.isLoading = false;
-      const headers = {
-        accept: "application/json",
-        "X-API-Key":
-          "4f96a149e04e0821d20f9e99ee716e20ff52db7238f38663226b1c0f303003e0",
-      };
-
-      axios
-        .get(url, { params, headers })
-        .then((response) => {
-          console.log(response.data.result);
-          this.coin = response.data.result;
-        })
-        .catch((error) => {
-          console.error("There was a problem with the request:", error);
-        });
-    },
-    formatTime(timestamp) {
-      const date = new Date(timestamp * 1000);
-      const hours = date.getHours().toString().padStart(2, "0");
-      const minutes = date.getMinutes().toString().padStart(2, "0");
-      return `${hours}:${minutes}`;
-    },
-    resol() {
-      return this.coin.map((t) => {
-        let transactionType = "";
-        let message = "";
-        let ton = 0;
-        let date = "";
-        let address = "";
-        let time = t.utime;
-        let fee = parseFloat(t.fee) / 1e9;
-        let trId = this.base64ToHex(t.transaction_id.hash);
-        if (t.out_msgs && t.out_msgs.length > 0) {
-          transactionType = "Sent";
-          ton = -parseFloat(t.out_msgs[0].value) / 1e9;
-          message = atob(t.out_msgs[0].msg_data.text);
-          date = this.formatTime(t.utime);
-          address = t.out_msgs[0].destination;
-        } else {
-          transactionType = "Received";
-          message = atob(t.in_msg.msg_data.text);
-          ton = "+ " + parseFloat(t.in_msg.value) / 1e9;
-          date = this.formatTime(t.utime);
-          address = t.in_msg.destination;
-        }
-
-        return {
-          transactionType: transactionType,
-          text: message,
-          ton: ton,
-          date: date,
-          address: address,
-          time: time,
-          fee: fee,
-          trId: trId,
-        };
-      });
-    },
   },
 
-  created() {
-    setTimeout(async () => {
-      const keys = localStorage.getItem("publicArr");
-      const key = await mnemonicToWalletKey(keys.split(","));
-      console.log(key);
-      const wallet = WalletContractV4.create({
-        publicKey: key.publicKey,
-        workchain: 0,
-      });
-      const endpoint = await getHttpEndpoint({ network: "testnet" });
-      const client = new TonClient({ endpoint });
-      const balance = await client.getBalance(wallet.address);
-
-      this.balance = fromNano(balance);
-      this.walletAddres = wallet.address.toString({ testOnly: true });
-      console.log(client.getTransactions(this.walletAddres, { limit: 10 }));
-      this.fetch();
-      this.resol();
+  async created() {
+    setTimeout(() => {
+      this.isLoading = false;
     }, 2000);
+
+    const ad = localStorage.getItem("publicArr");
+    const transactionRef = doc(db, "transaction", ad);
+
+    const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
+      if (docSnap.exists()) {
+        this.items = docSnap.data().transactions;
+      } else {
+      }
+    });
   },
 };
 </script>
@@ -383,28 +264,27 @@ export default {
   left: 0;
   width: 100%;
   height: 90px;
-  background-color: rgba(255, 255, 255, 0.7); /* Прозрачный серый фон */
-  z-index: 9999; /* Выше других элементов */
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
 }
 
 .loader::after {
   content: "Загрузка...";
   font-size: 18px;
-  color: #333; /* Цвет текста */
-  margin-left: 10px; /* Небольшое расстояние между текстом и индикатором загрузки */
+  color: #333;
+  margin-left: 10px;
 }
 
-/* Анимированный индикатор загрузки */
 .loader:after {
   content: "";
   display: inline-block;
-  width: 24px; /* Ширина индикатора */
-  height: 24px; /* Высота индикатора */
+  width: 24px;
+  height: 24px;
   margin-top: 35px;
   border-radius: 50%;
-  border: 4px solid #333; /* Цвет индикатора */
+  border: 4px solid #333;
   border-color: #333 transparent #333 transparent;
-  animation: loaderAnimation 1.2s linear infinite; /* Анимация вращения */
+  animation: loaderAnimation 1.2s linear infinite;
 }
 
 @keyframes loaderAnimation {

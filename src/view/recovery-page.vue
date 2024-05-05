@@ -112,6 +112,20 @@
 </template>
 
 <script>
+import {
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+  query,
+  where,
+  setDoc,
+  collection,
+  onSnapshot,
+  getDocs,
+  getDocsFromServer,
+} from "firebase/firestore";
+import { db } from "../firebase/firebase";
 export default {
   data() {
     return {
@@ -119,9 +133,14 @@ export default {
     };
   },
   created() {
-    const keys = localStorage.getItem("publicArr");
-    const res = keys.split(",");
-    this.randomPh = res;
+    const ad = localStorage.getItem("publicArr");
+    const transactionRef = doc(db, "users", ad);
+    const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
+      if (docSnap.exists()) {
+        this.randomPh = docSnap.data().rPhrases;
+      } else {
+      }
+    });
   },
 };
 </script>

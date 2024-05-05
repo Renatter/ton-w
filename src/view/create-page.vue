@@ -131,47 +131,22 @@
 </template>
 
 <script>
-import { getHttpEndpoint } from "@orbs-network/ton-access";
+import { mnemonicNew, mnemonicValidate } from "@ton/crypto";
 import {
-  mnemonicToWalletKey,
-  mnemonicNew,
-  mnemonicToPrivateKey,
-  mnemonicValidate,
-} from "@ton/crypto";
-import { WalletContractV4, TonClient, fromNano } from "@ton/ton";
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  onSnapshot,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 export default {
   data() {
     return {
       open: false,
-      phrases: [
-        "select",
-        "chuckle",
-        "upgrade",
-        "flee",
-        "process",
-        "zebra",
-        "subway",
-        "cross",
-        "diamond",
-        "laundry",
-        "version",
-        "own",
-        "jungle",
-        "wolf",
-        "praise",
-        "rule",
-        "post",
-        "pigeon",
-        "board",
-        "differ",
-        "morning",
-        "memory",
-        "solar",
-        "demise",
-      ],
-      phras:
-        "select chuckle upgrade flee process zebra subway cross diamond laundry version own jungle wolf praise rule post pigeon board differ morning memory solar demise",
       inputBool: false,
       passBool: false,
       selectedWords: [],
@@ -181,6 +156,10 @@ export default {
       isValid: [],
       password: "",
       confirmPassword: "",
+      addres: "",
+      balance: 0,
+      rPhrases: [],
+      pass: "",
     };
   },
   computed: {
@@ -195,52 +174,59 @@ export default {
   },
 
   methods: {
+    generateCustomUUID() {
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+      const length = 50;
+      let uuid = "";
+
+      for (let i = 0; i < length; i++) {
+        const randomNumber = Math.floor(Math.random() * characters.length);
+        uuid += characters[randomNumber];
+      }
+
+      return uuid;
+    },
     validatePasswords() {
       if (!this.arePasswordsValid) {
-        // Если пароли не соответствуют требованиям, прерываем дальнейшее действие
         return;
       }
-      // Иначе продолжаем действие
       this.addWallet();
     },
     async addWallet() {
-      const key = await mnemonicToPrivateKey(this.randomPh);
-      const wallet = WalletContractV4.create({
-        publicKey: key.publicKey,
-        workchain: 0,
-      });
-      localStorage.setItem("publicArr", this.randomPh);
-      const endpoint = await getHttpEndpoint({ network: "testnet" });
-      const client = new TonClient({ endpoint });
-      const balance = await client.getBalance(wallet.address);
-      this.balance = fromNano(balance);
-      console.log(wallet.address.toString({ testOnly: true }));
-      this.$router.push("/wallet");
+      this.addres = this.generateCustomUUID();
+      localStorage.setItem("publicArr", this.addres);
+      try {
+        await setDoc(doc(db, "users", this.addres), {
+          addres: this.addres,
+          password: this.confirmPassword,
+          balance: 0,
+          rPhrases: this.randomPh,
+        });
+        this.$router.push("/wallet");
+      } catch {}
     },
     async randomsPh() {
       this.randomPh = await mnemonicNew(12);
       this.open = !this.open;
       this.getRandomWords();
-      console.log(this.randomPh);
     },
     validateInputs() {
       if (this.inputWord.every((word) => !word.trim())) {
         // Если все вводы пусты, ничего не делаем
         return;
       }
-      // Иначе продолжаем действие
+
       this.passBool = !this.passBool;
     },
     async validateWord(index) {
       if (!this.inputWord[index]) {
-        // Если поле ввода пустое, устанавливаем isValid в true
         this.isValid[index] = true;
         return;
       }
       const isBool = await mnemonicValidate(this.randomPh);
       if (isBool) {
         this.isValid[index] = this.randomPh.includes(this.inputWord[index]);
-        console.log(this.isValid);
       }
     },
     getRandomWords() {
@@ -265,8 +251,8 @@ export default {
 
 <style lang="scss" scoped>
 .disabled {
-  pointer-events: none; /* Делаем кнопку некликабельной */
-  opacity: 0.5; /* Уменьшаем прозрачность кнопки */
+  pointer-events: none;
+  opacity: 0.5;
 }
 .b {
   display: flex;

@@ -1,31 +1,30 @@
 <template>
   <div>
     <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
-    <router-link to="/recovery">
-      <div
-        class="bg-[#1D2633] flex justify-between rounded-t-[15px] p-[15px] hover:bg-[#2E3847]"
+    <div
+      @click="isPass = !isPass"
+      class="bg-[#1D2633] flex justify-between rounded-t-[15px] p-[15px] hover:bg-[#2E3847]"
+    >
+      <p class="font-bold">Recovery phrase</p>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1.75rem"
+        height="1.75rem"
+        viewBox="0 0 28 28"
       >
-        <p class="font-bold">Recovery phrase</p>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1.75rem"
-          height="1.75rem"
-          viewBox="0 0 28 28"
-        >
-          <path
-            opacity="0.32"
-            d="M12.5 10.001C12.5 11.3817 11.3807 12.501 10 12.501C8.61929 12.501 7.5 11.3817 7.5 10.001C7.5 8.62026 8.61929 7.50098 10 7.50098C11.3807 7.50098 12.5 8.62026 12.5 10.001Z"
-            fill="#45AEF5"
-          />
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M19 11.001C19 12.0397 18.802 13.0322 18.4418 13.9428L24.0627 19.5637C24.4086 19.9096 24.5816 20.0826 24.7053 20.2844C24.8149 20.4634 24.8957 20.6584 24.9447 20.8625C25 21.0927 25 21.3373 25 21.8265V25.001H20.5V23.501H19V22.001H17.5V20.501H16L13.9418 18.4428C13.0312 18.803 12.0387 19.001 11 19.001C6.58172 19.001 3 15.4193 3 11.001C3 6.5827 6.58172 3.00098 11 3.00098C15.4183 3.00098 19 6.5827 19 11.001ZM10 12.501C11.3807 12.501 12.5 11.3817 12.5 10.001C12.5 8.62026 11.3807 7.50098 10 7.50098C8.61929 7.50098 7.5 8.62026 7.5 10.001C7.5 11.3817 8.61929 12.501 10 12.501Z"
-            fill="#45AEF5"
-          />
-        </svg>
-      </div>
-    </router-link>
+        <path
+          opacity="0.32"
+          d="M12.5 10.001C12.5 11.3817 11.3807 12.501 10 12.501C8.61929 12.501 7.5 11.3817 7.5 10.001C7.5 8.62026 8.61929 7.50098 10 7.50098C11.3807 7.50098 12.5 8.62026 12.5 10.001Z"
+          fill="#45AEF5"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M19 11.001C19 12.0397 18.802 13.0322 18.4418 13.9428L24.0627 19.5637C24.4086 19.9096 24.5816 20.0826 24.7053 20.2844C24.8149 20.4634 24.8957 20.6584 24.9447 20.8625C25 21.0927 25 21.3373 25 21.8265V25.001H20.5V23.501H19V22.001H17.5V20.501H16L13.9418 18.4428C13.0312 18.803 12.0387 19.001 11 19.001C6.58172 19.001 3 15.4193 3 11.001C3 6.5827 6.58172 3.00098 11 3.00098C15.4183 3.00098 19 6.5827 19 11.001ZM10 12.501C11.3807 12.501 12.5 11.3817 12.5 10.001C12.5 8.62026 11.3807 7.50098 10 7.50098C8.61929 7.50098 7.5 8.62026 7.5 10.001C7.5 11.3817 8.61929 12.501 10 12.501Z"
+          fill="#45AEF5"
+        />
+      </svg>
+    </div>
     <div
       @click="showCreateWallet = !showCreateWallet"
       class="bg-[#1D2633] flex justify-between p-[15px] hover:bg-[#2E3847]"
@@ -208,15 +207,87 @@
         <p class="text-center font-[600]">Sign Out</p>
       </div>
     </div>
+    <div
+      v-if="isPass"
+      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 pt-[30px] z-50 px-[20px]"
+    >
+      <p
+        @click="isPass = !isPass"
+        class="bg-[#1D2633] w-[30px] h-[30px] text-center rounded-full cursor-pointer hover:bg-[#313c4a] top-[20px] absolute right-[20px]"
+      >
+        <router-link to="/settings">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1rem"
+            height="1rem"
+            class="ml-[7px] mt-[7px]"
+            viewBox="0 0 16 16"
+            color="#8994A3"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.46967 2.46967C2.76256 2.17678 3.23744 2.17678 3.53033 2.46967L8 6.93934L12.4697 2.46967C12.7626 2.17678 13.2374 2.17678 13.5303 2.46967C13.8232 2.76256 13.8232 3.23744 13.5303 3.53033L9.06066 8L13.5303 12.4697C13.8232 12.7626 13.8232 13.2374 13.5303 13.5303C13.2374 13.8232 12.7626 13.8232 12.4697 13.5303L8 9.06066L3.53033 13.5303C3.23744 13.8232 2.76256 13.8232 2.46967 13.5303C2.17678 13.2374 2.17678 12.7626 2.46967 12.4697L6.93934 8L2.46967 3.53033C2.17678 3.23744 2.17678 2.76256 2.46967 2.46967Z"
+              fill="currentColor"
+            />
+          </svg>
+        </router-link>
+      </p>
+      <h1 class="text-[20px] font-bold text-left">Enter password</h1>
+
+      <div class="pt-[20px]">
+        <input
+          type="password"
+          id="confirmPassword"
+          v-model="password"
+          class="bg-[#1D2633] text-[white] text-sm rounded-[15px] focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-[15px] h-[60px] text-[20px]"
+          placeholder="password"
+          required
+        />
+      </div>
+      <div class="flex gap-[10px]">
+        <div
+          @click="isPass = !isPass"
+          class="mt-[20px] bg-[#28303D] py-[18px] rounded-[17px] cursor-pointer w-[100%] mb-[15px]"
+          :disabled="!backupChecked"
+        >
+          <p class="text-center font-[600]">Cancel</p>
+        </div>
+        <div
+          @click="confirmAction"
+          class="mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer w-[100%] mb-[15px]"
+          :disabled="!backupChecked"
+        >
+          <p class="text-center font-[600]">Confirm</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import {
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+  query,
+  where,
+  setDoc,
+  collection,
+  onSnapshot,
+  getDocs,
+  getDocsFromServer,
+} from "firebase/firestore";
+import { db } from "../firebase/firebase";
 export default {
   data() {
     return {
-      showCreateWallet: false, // Для примера, я оставил это свойство, вы можете изменить его в зависимости от вашей логики
+      showCreateWallet: false,
+      isPass: false,
       backupChecked: false,
+      password: "",
+      passChek: "",
     };
   },
   methods: {
@@ -226,6 +297,17 @@ export default {
         this.$router.push("/");
       }
     },
+    async confirmAction() {
+      if (this.password === this.passChek) {
+        this.$router.push("/recovery");
+      }
+    },
+  },
+  async created() {
+    const ad = localStorage.getItem("publicArr");
+    const washingtonRef = doc(db, "users", ad);
+    const docSnap = await getDoc(washingtonRef);
+    this.passChek = docSnap.data().password;
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="col relative">
+  <div class="col relative" v-if="!imports && !passBool">
     <div class="relative">
       <h1 class="text-[32px] font-bold">
         Welcome <br />
@@ -139,7 +139,7 @@
   </div>
 
   <div
-    v-if="imports"
+    v-if="imports && !passBool"
     class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] bottom-0 create-wallet-animation top-0 absolute w-[520px] p-[1rem] flex flex-col justify-center items-center"
   >
     <!-- Используйте изображение как фоновое изображение -->
@@ -176,51 +176,141 @@
       </div>
     </div>
   </div>
+  <div v-if="passBool">
+    <div class="b">
+      <div class="text-center w-[100%]">
+        <p class="font-bold text-[24px]">Create password</p>
+
+        <div class="pt-[20px]">
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            class="bg-[#1D2633] text-[white] text-sm rounded-[15px] focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-[15px] h-[60px] text-[20px]"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <p class="text-left gr pt-[10px] text-[14px]">
+          Must be at least 6 characters.
+        </p>
+        <div class="pt-[20px]">
+          <input
+            type="password"
+            id="confirmPassword"
+            v-model="confirmPassword"
+            class="bg-[#1D2633] text-[white] text-sm rounded-[15px] focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-[15px] h-[60px] text-[20px]"
+            placeholder="Re-enter password"
+            required
+          />
+        </div>
+
+        <div
+          @click="validatePasswords"
+          :class="{ disabled: !arePasswordsValid }"
+          class="mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer"
+        >
+          <p class="text-center font-[600]">Continue</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import {
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+  query,
+  where,
+  setDoc,
+  collection,
+  onSnapshot,
+  getDocs,
+  getDocsFromServer,
+} from "firebase/firestore";
+import { db } from "../firebase/firebase";
 import { mnemonicValidate } from "@ton/crypto";
-
 export default {
   data() {
     return {
       showCreateWallet: false,
       imports: false,
+      passBool: false,
       inputs: [],
       prhases: [],
+      adress: "",
+      password: "",
+      confirmPassword: "",
     };
   },
+  computed: {
+    arePasswordsValid() {
+      return (
+        this.password.length >= 6 && this.password === this.confirmPassword
+      );
+    },
+  },
   methods: {
+    async validatePasswords() {
+      if (!this.arePasswordsValid) {
+        return;
+      }
+      const washingtonRef = doc(db, "users", this.adress);
+
+      await updateDoc(washingtonRef, {
+        password: this.confirmPassword,
+      });
+      localStorage.setItem("publicArr", this.adress);
+      this.$router.push("/wallet");
+    },
     async pushPhrases() {
-      // Проверка наличия всех фраз ввода перед добавлением в массив
       if (
         this.inputs.length === 12 &&
         this.inputs.every((input) => input.trim().length > 0)
       ) {
-        // Добавляем фразы в массив prhases
         this.prhases = [...this.inputs];
         const res = await mnemonicValidate(this.prhases);
-        console.log(res);
         if (res) {
-          localStorage.setItem("publicArr", this.randomPh);
-          this.$router.push("/wallet");
+          const q = query(
+            collection(db, "users"),
+            where("rPhrases", "==", this.prhases)
+          );
+          onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              this.adress = doc.data().addres;
+            });
+          });
+          this.passBool = !this.passBool;
+          this.showCreateWallet = !this.showCreateWallet;
         } else {
           alert("Error 12 phrases.");
         }
       } else {
-        // Если не все фразы введены, вы можете выдать сообщение об ошибке или предупреждение
         alert("Please fill in all 12 phrases.");
       }
     },
   },
+  created() {},
 };
 </script>
 
 <style lang="scss" scoped>
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 .col {
   padding-top: 250px;
 }
-
+.b {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 .black-overlay {
   position: absolute;
   top: 0;
@@ -228,8 +318,8 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1; /* Ensure the overlay appears above other content */
-  display: none; /* Initially hidden */
+  z-index: 1;
+  display: none;
 }
 
 @keyframes myAnim {
