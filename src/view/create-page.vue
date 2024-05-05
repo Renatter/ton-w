@@ -78,15 +78,16 @@
             />
           </div>
           <div
-            @click="passBool = !passBool"
+            @click="validateInputs"
             :class="{ disabled: !isAllValid }"
             class="mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer"
           >
-            <p class="text-center font-[600]">Continuess</p>
+            <p class="text-center font-[600]">Continue</p>
           </div>
         </div>
       </div>
     </div>
+
     <div v-if="passBool">
       <div class="b">
         <div class="text-center w-[100%]">
@@ -95,7 +96,8 @@
           <div class="pt-[20px]">
             <input
               type="password"
-              id="first_name"
+              id="password"
+              v-model="password"
               class="bg-[#1D2633] text-[white] text-sm rounded-[15px] focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-[15px] h-[60px] text-[20px]"
               placeholder="Password"
               required
@@ -107,21 +109,21 @@
           <div class="pt-[20px]">
             <input
               type="password"
-              id="first_name"
+              id="confirmPassword"
+              v-model="confirmPassword"
               class="bg-[#1D2633] text-[white] text-sm rounded-[15px] focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-[15px] h-[60px] text-[20px]"
               placeholder="Re-enter password"
               required
             />
           </div>
 
-          <router-link to="/wallet">
-            <div
-              @click="addWallet"
-              class="mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer"
-            >
-              <p class="text-center font-[600]">Continue</p>
-            </div>
-          </router-link>
+          <div
+            @click="validatePasswords"
+            :class="{ disabled: !arePasswordsValid }"
+            class="mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer"
+          >
+            <p class="text-center font-[600]">Continue</p>
+          </div>
         </div>
       </div>
     </div>
@@ -129,7 +131,6 @@
 </template>
 
 <script>
-import TonWeb from "tonweb";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 import {
   mnemonicToWalletKey,
@@ -178,16 +179,30 @@ export default {
       itemInput: "",
       inputWord: [],
       isValid: [],
+      password: "",
+      confirmPassword: "",
     };
   },
   computed: {
     isAllValid() {
-      // Проверяем, прошли ли все валидации
-      return this.isValid.every((valid) => valid === true);
+      return this.inputWord.every((word) => word.trim() !== "");
+    },
+    arePasswordsValid() {
+      return (
+        this.password.length >= 6 && this.password === this.confirmPassword
+      );
     },
   },
 
   methods: {
+    validatePasswords() {
+      if (!this.arePasswordsValid) {
+        // Если пароли не соответствуют требованиям, прерываем дальнейшее действие
+        return;
+      }
+      // Иначе продолжаем действие
+      this.addWallet();
+    },
     async addWallet() {
       const key = await mnemonicToPrivateKey(this.randomPh);
       const wallet = WalletContractV4.create({
@@ -200,12 +215,21 @@ export default {
       const balance = await client.getBalance(wallet.address);
       this.balance = fromNano(balance);
       console.log(wallet.address.toString({ testOnly: true }));
+      this.$router.push("/wallet");
     },
     async randomsPh() {
       this.randomPh = await mnemonicNew(12);
       this.open = !this.open;
       this.getRandomWords();
       console.log(this.randomPh);
+    },
+    validateInputs() {
+      if (this.inputWord.every((word) => !word.trim())) {
+        // Если все вводы пусты, ничего не делаем
+        return;
+      }
+      // Иначе продолжаем действие
+      this.passBool = !this.passBool;
     },
     async validateWord(index) {
       if (!this.inputWord[index]) {
@@ -222,7 +246,7 @@ export default {
     getRandomWords() {
       const tempArray = [...this.randomPh];
       this.selectedWords = [];
-      this.isValid = []; // Инициализация массива isValid здесь
+      this.isValid = [];
 
       for (let i = 0; i < 3; i++) {
         const randomIndex = Math.floor(Math.random() * tempArray.length);
@@ -232,7 +256,6 @@ export default {
         };
         this.selectedWords.push(wordObject);
         tempArray.splice(randomIndex, 1);
-        this.isValid.push(true);
       }
     },
   },
