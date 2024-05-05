@@ -3948,7 +3948,7 @@
   </div>
   <div class="menu">
     <div
-      class="flex justify-evenly fixed bottom-0 w-[530px] bg-[#0B0F16] pb-[10px]"
+      class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
     >
       <router-link to="/wallet">
         <div class="">
@@ -4158,6 +4158,7 @@ export default {
       await updateDoc(washingtonRef, {
         balance: newBalance,
       });
+      location.reload();
     },
     getFormattedDateTime() {
       const months = [
@@ -4260,7 +4261,6 @@ export default {
             transactions: currentTransactions,
           });
           this.updateVal();
-          location.reload();
         } else {
           await setDoc(transactionRef, {
             transactions: [
@@ -4278,7 +4278,6 @@ export default {
             ],
           });
           this.updateVal();
-          location.reload();
         }
         const guesttransactionRef = doc(db, "transaction", this.guestAddress);
         const guesttransactionDoc = await getDoc(guesttransactionRef);
@@ -4301,7 +4300,6 @@ export default {
             transactions: currentTransactions,
           });
           this.updateGuesVal();
-          location.reload();
         } else {
           await setDoc(guesttransactionRef, {
             transactions: [
@@ -4319,7 +4317,6 @@ export default {
             ],
           });
           this.updateGuesVal();
-          location.reload();
         }
       } catch (error) {
         console.error("Error adding transaction: ", error);

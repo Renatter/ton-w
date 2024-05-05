@@ -31,7 +31,7 @@
     </div>
   </div>
   <div
-    class="flex justify-evenly fixed bottom-0 w-[530px] bg-[#0B0F16] pb-[10px]"
+    class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
     <router-link to="/wallet">
       <div class="">

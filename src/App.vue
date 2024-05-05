@@ -1,5 +1,8 @@
 <template>
-  <div :style="{ 'min-height': `${screenHeight}px` }" class="container">
+  <div
+    :style="{ 'min-height': `${screenHeight}px`, position: 'relative' }"
+    class="container"
+  >
     <router-view></router-view>
   </div>
 </template>
