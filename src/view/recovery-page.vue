@@ -30,8 +30,8 @@
       </span>
     </div>
   </div>
-  <div
-    class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+ <div
+    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
     <router-link to="/wallet">
       <div class="">
@@ -154,5 +154,12 @@ export default {
   place-content: space-evenly;
   margin: 1rem 0px;
   white-space: normal;
+}
+.bottom-s {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 </style>

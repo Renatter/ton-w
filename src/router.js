@@ -7,11 +7,16 @@ import SettingPage from './view/settings-page.vue';
 import ToncPage from './view/ton-coin-page.vue';
 import UsdtcPage from './view/usdt-coin-page.vue';
 import RecoveryPage from './view/recovery-page.vue';
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
+      redirect: '/welcome',
+    },
+    {
+      path: '/welcome',
       component: WlecomePage,
     },
     {
@@ -43,6 +48,16 @@ const router = createRouter({
       component: HistoryPage,
     },
   ],
+});
+
+
+router.beforeEach((to, from, next) => {
+  let hasPublickAr = localStorage.getItem('publicArr');
+  if (hasPublickAr === null && ['/wallet', '/history', '/recovery', '/settings', '/usdt-coin', '/ton-coin'].includes(to.path)) {
+    next({path: '/welcome'});
+  } else {
+    next();
+  }
 });
 
 export default router;

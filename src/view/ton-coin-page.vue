@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative p-[1rem]">
     <h1 class="pt-[10px] text-center text-[20px] font-bold">Toncoin</h1>
     <p
       @click="showCreateWallet = !showCreateWallet"
@@ -23,9 +23,10 @@
     <div class="flex justify-between pt-[30px]">
       <div>
         <h1 class="text-[24px] font-bold">{{ userWallets.balance }} TON</h1>
-        <p class="gr text-[14px]">
-          $ {{ (userWallets.balance * 5.27).toFixed(2) }}
-        </p>
+        <div class="gr text-[14px]">
+          <img v-if="isNaN(userWallets.balance)" src="../assets/loading.gif" alt="" width="30px">
+            <p v-else> $ {{(userWallets.balance * 5.75).toFixed(2)}}</p>
+        </div>
       </div>
       <img src="https://wallet.tonkeeper.com/img/toncoin.svg" alt="" />
     </div>
@@ -78,7 +79,7 @@
   </div>
   <div
     v-if="showCreateWallet && !count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] bottom-x   rounded-t-[17px] create-wallet-animation top-0   pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Recipient</p>
     <p
@@ -123,7 +124,7 @@
   </div>
   <div
     v-if="showCreateWallet && count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] p-[1rem] create-wallet-animation absolute top-[15px] bottom-x pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Amount</p>
     <p class="text-center gr">To: {{ shortenString(guestAddress) }}</p>
@@ -185,7 +186,7 @@
   </div>
   <div
     v-if="send"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] p-[1rem] rounded-t-[17px] create-wallet-animation absolute top-[15px] bottom-x pt-[30px] z-50"
   >
     <p
       @click="
@@ -290,7 +291,7 @@
   </div>
   <div
     v-if="recive"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] bottom-x pt-[30px] z-50"
     style="display: flex;
     flex-direction: column;
     justify-content: center;
@@ -3952,7 +3953,7 @@
       <p class="ml-[1px] text-center">Add +5 ton</p>
     </button>
   </div>
-  <div class="pb-[50px]">
+  <div class="pb-[50px] p-[1rem]" >
     <div class="history-container">
       <div v-if="isLoading" v-for="i in 5" class="loader mb-[20px]"></div>
       <div
@@ -3993,7 +3994,7 @@
   </div>
   <div
     v-if="showInfoWallet"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  w-[100%] bottom-x  z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -4040,7 +4041,7 @@
   </div>
   <!-- FOOTER -->
   <div
-    class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
     <router-link to="/wallet">
       <div class="">
@@ -4430,8 +4431,7 @@ export default {
     },
   },
   async created() {
-    setTimeout(async () => {
-      this.isLoading = false;
+     
       const ad = localStorage.getItem("publicArr");
       const q = query(collection(db, "users"), where("addres", "==", ad));
       const querySnapshot = await getDocs(q);
@@ -4439,13 +4439,13 @@ export default {
       const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
         if (docSnap.exists()) {
           this.items = docSnap.data().transactions;
-        } else {
-        }
+        } 
+        this.isLoading = false
       });
       querySnapshot.forEach((doc) => {
         this.userWallets = doc.data();
       });
-    }, 2000);
+    
   },
 };
 async function sleep(ms) {
@@ -4532,5 +4532,18 @@ async function sleep(ms) {
   100% {
     transform: rotate(360deg);
   }
+}
+.bottom-x {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+
+}
+.bottom-s {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative  p-[1rem]">
     <h1 class="pt-[10px] text-center text-[20px] font-bold">USDT</h1>
     <p
       @click="showCreateWallet = !showCreateWallet"
@@ -14,7 +14,7 @@
           viewBox="0 0 16 16"
         >
           <path
-            d="M10.3075 3.50173C10.5846 3.19385 10.5596 2.0.0071963 10.2517 2.44254C9.94384 2.16544 9.46962 2.1904 9.19253 2.49828L4.69253 7.49828C4.43582 7.78351 4.43582 8.2165 4.69253 8.50173L9.19253 13.5017C9.46962 13.8096 9.94384 13.8346 10.2517 13.5575C10.5596 13.2804 10.5846 12.8062 10.3075 12.4983L6.25902 8.00001L10.3075 3.50173Z"
+            d="M10.3075 3.50173C10.5846 3.19385 10.5596 2.71963 10.2517 2.44254C9.94384 2.16544 9.46962 2.1904 9.19253 2.49828L4.69253 7.49828C4.43582 7.78351 4.43582 8.2165 4.69253 8.50173L9.19253 13.5017C9.46962 13.8096 9.94384 13.8346 10.2517 13.5575C10.5596 13.2804 10.5846 12.8062 10.3075 12.4983L6.25902 8.00001L10.3075 3.50173Z"
             fill="currentColor"
           />
         </svg>
@@ -23,9 +23,10 @@
     <div class="flex justify-between pt-[30px]">
       <div>
         <h1 class="text-[24px] font-bold">$ {{ userWallets.balanceUsdt}} USDT</h1>
-        <p class="gr text-[14px]">
-          TON: {{ (userWallets.balanceUsdt / 5.27).toFixed(2) }}
-        </p>
+  <div class="gr text-[14px]">
+          <img v-if="isNaN(userWallets.balanceUsdt)" src="../assets/loading.gif" alt="" width="30px">
+            <p v-else>{{(userWallets.balanceUsdt / 5.75).toFixed(2)}}</p>
+        </div>
       </div>
       <img height="57px" width="57px" src="https://wallet.tonkeeper.com/img/usdt.svg" alt="" />
     </div>
@@ -78,7 +79,7 @@
   </div>
   <div
     v-if="showCreateWallet && !count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Recipient</p>
     <p
@@ -123,7 +124,7 @@
   </div>
   <div
     v-if="showCreateWallet && count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50 px-[15px]"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50 px-[15px]"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Amount</p>
     <p class="text-center gr">To: {{ shortenString(guestAddress) }}</p>
@@ -185,7 +186,7 @@
   </div>
   <div
     v-if="send"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] p-[1rem] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
   >
     <p
       @click="
@@ -290,7 +291,7 @@
   </div>
   <div
     v-if="recive"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
     style="display: flex;
     flex-direction: column;
     justify-content: center;
@@ -343,12 +344,12 @@
       <p class="ml-[10px] text-center">Add +5 USDT</p>
     </button>
   </div>
-  <div class="pb-[50px]">
+  <div class="pb-[50px] p-[1rem]">
     <div class="history-container">
       <div v-if="isLoading" v-for="i in 5" class="loader mb-[20px]"></div>
       <div
         v-else
-        class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
+        class=" w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
         v-for="i in items"
         @click="selectItem(i)"
       >
@@ -384,7 +385,7 @@
   </div>
   <div
     v-if="showInfoWallet"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 z-50"
+     class="bg-[#10161F] bottom-x rounded-t-[17px] create-wallet-animation    pt-[30px] z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -397,7 +398,7 @@
       <p class="mb-[25px]">
         {{ selectedItem.date }}
       </p>
-      <div class="rounded-[15px] bg-[#1D2633] mx-[20px]">
+      <div class="rounded-[15px] bg-[#1D2633] mx-[10px]">
         <div class="flex justify-between p-[10px]">
           <p class="gr">
             {{ selectedItem.text === "Sent" ? "Recipient" : "Sender" }}
@@ -431,7 +432,7 @@
   </div>
   <!-- FOOTER -->
   <div
-    class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
     <router-link to="/wallet">
       <div class="">
@@ -821,8 +822,7 @@ export default {
     },
   },
   async created() {
-    setTimeout(async () => {
-      this.isLoading = false;
+    
       const ad = localStorage.getItem("publicArr");
       const q = query(collection(db, "users"), where("addres", "==", ad));
       const querySnapshot = await getDocs(q);
@@ -831,18 +831,15 @@ export default {
         if (docSnap.exists()) {
           this.items = docSnap.data().transactions;
           
-        } else {
         }
+         this.isLoading = false;
       });
       querySnapshot.forEach((doc) => {
         this.userWallets = doc.data();
       });
-    }, 2000);
+    
   },
 };
-async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 </script>
 
 <style lang="scss" scoped>
@@ -897,7 +894,12 @@ async function sleep(ms) {
   background-color: rgba(255, 255, 255, 0.7);
   z-index: 9999;
 }
+.bottom-x {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
 
+}
 .loader::after {
   content: "Загрузка...";
   font-size: 18px;
@@ -925,4 +927,18 @@ async function sleep(ms) {
     transform: rotate(360deg);
   }
 }
+.bottom-s {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.bottom-x {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+
+}
+
 </style>

@@ -1,15 +1,11 @@
-<template>
-  <div class="">
+<template class="">
+  <div class="p-[1rem]" >
     <h1 class="text-center font-bold text-[20px]">Wallet</h1>
 
     <div class="wallet-info text-center pt-[55px] w-[]">
       <h1 class="font-bold text-[28px]">
-        $
-        {{
-          userWallets.balance === 0
-            ? 0
-            : (userWallets.balance * 5.75).toFixed(2)
-        }}
+       <img v-if="isNaN(userWallets.balance)" class="dead" src="../assets/loading.gif" alt="" width="50px">
+            <p v-else>{{(userWallets.balance * 5.75).toFixed(2)}}</p>
       </h1>
       <p class="gr font-bold text-[14px]">
         {{ shortenString(userWallets.addres) }}
@@ -76,7 +72,8 @@
           </div>
         </div>
         <div class="text-right">
-          <p class="font-bold">{{ userWallets.balance }} TON</p>
+           <img v-if="isNaN(userWallets.balance)" src="../assets/loading.gif" alt="" width="30px">
+            <p v-else class="font-bold">{{userWallets.balance }} TON</p>
         </div>
       </div>
     </router-link>
@@ -96,14 +93,15 @@
           </div>
         </div>
         <div class="text-right">
-          <p class="font-bold">{{ userWallets.balanceUsdt }} USDT</p>
+          <img v-if="isNaN(userWallets.balanceUsdt)" src="../assets/loading.gif" alt="" width="30px">
+            <p v-else class="font-bold">{{userWallets.balanceUsdt }} USDT</p>
         </div>
       </div>
     </router-link>
   </div>
   <div
     v-if="showCreateWallet && !count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F]  rounded-t-[17px] create-wallet-animation bottom-x top-[15px] w-[100%]  pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Recipient</p>
     <p
@@ -148,7 +146,7 @@
   </div>
   <div
     v-if="showCreateWallet && count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] p-[1rem] create-wallet-animation  top-[15px] w-[100%] bottom-x pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Amount</p>
     <p class="text-center gr">To: {{ shortenString(guestAddress) }}</p>
@@ -210,7 +208,7 @@
   </div>
   <div
     v-if="send"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F]  p-[1rem] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
   >
     <p
       @click="
@@ -315,7 +313,7 @@
   </div>
   <div
     v-if="recive"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F]  p-[1rem] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%]  bottom-x -0 pt-[30px] z-50"
     style="display: flex;
     flex-direction: column;
     justify-content: center;
@@ -3977,10 +3975,9 @@
       <p class="ml-[1px] text-center">Add +5 ton</p>
     </button>
   </div>
-  <div class="menu">
-    <div
-      class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
-    >
+<div
+    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+  >
       <router-link to="/wallet">
         <div class="">
           <svg
@@ -4057,7 +4054,7 @@
         </div>
       </router-link>
     </div>
-  </div>
+ 
 </template>
 
 <script>
@@ -4389,5 +4386,18 @@ async function sleep(ms) {
 }
 .invalid-input {
   background-color: rgba(232, 20, 55, 0.1);
+}
+.bottom-s {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.bottom-x {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+
 }
 </style>

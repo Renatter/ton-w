@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
+ 
+<div class="p-[1rem]">
+      <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
     <div
       @click="isPass = !isPass"
       class="bg-[#1D2633] flex justify-between rounded-t-[15px] p-[15px] hover:bg-[#2E3847]"
@@ -72,9 +73,10 @@
         />
       </svg>
     </div>
-    <div
-      class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
-    >
+</div>
+  <div
+    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+  >
       <router-link to="/wallet">
         <div class="">
           <svg
@@ -154,7 +156,7 @@
 
     <div
       v-if="showCreateWallet"
-      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 pt-[30px] z-50 px-[10px]"
+      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  w-[100%] bottom-x   pt-[30px] z-50 px-[10px]"
     >
       <p
         @click="showCreateWallet = !showCreateWallet"
@@ -209,7 +211,7 @@
     </div>
     <div
       v-if="isPass"
-      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 pt-[30px] z-50 px-[20px]"
+      class="bg-[#10161F] rounded-t-[17px] create-wallet-animation bottom-x  w-[100%]  pt-[30px] z-50 px-[20px]"
     >
       <p
         @click="isPass = !isPass"
@@ -262,7 +264,7 @@
         </div>
       </div>
     </div>
-  </div>
+
 </template>
 
 <script>
@@ -312,4 +314,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.bottom-s {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    
+}
+.bottom-x {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+
+}
+</style>

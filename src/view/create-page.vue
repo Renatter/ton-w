@@ -175,36 +175,27 @@ export default {
 
   methods: {
     generateCustomUUID() {
-      const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
-      const length = 50;
-      let uuid = "";
-
-      for (let i = 0; i < length; i++) {
-        const randomNumber = Math.floor(Math.random() * characters.length);
-        uuid += characters[randomNumber];
-      }
-
-      return uuid;
+      return crypto.randomUUID();
     },
     validatePasswords() {
       if (!this.arePasswordsValid) {
         return;
-      }
+      };
       this.addWallet();
     },
     async addWallet() {
-      this.addres = this.generateCustomUUID();
-      localStorage.setItem("publicArr", this.addres);
       try {
+        this.addres = this.generateCustomUUID();
         await setDoc(doc(db, "users", this.addres), {
           addres: this.addres,
           password: this.confirmPassword,
           balance: 0,
           balanceUsdt:0,
           rPhrases: this.randomPh,
+        }).then((res, rej) => {
+                localStorage.setItem("publicArr", this.addres);
+                this.$router.push("/wallet");
         });
-        this.$router.push("/wallet");
       } catch {}
     },
     async randomsPh() {
@@ -219,6 +210,7 @@ export default {
       }
 
       this.passBool = !this.passBool;
+      
     },
     async validateWord(index) {
       if (!this.inputWord[index]) {

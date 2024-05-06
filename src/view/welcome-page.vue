@@ -155,7 +155,7 @@
         recovery phrase
       </h1>
       <p class="text-center gr my-[10px] pb-[30px]">
-        To restore access to your wallet, enter the 24 secret recovery words
+        To restore access to your wallet, enter the 12 secret recovery words
         given to you when you created your wallet.
       </p>
       <div class="flex justify-between flex-wrap gap-[5px]">

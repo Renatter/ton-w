@@ -1,6 +1,6 @@
 <template>
-  <div class="">
-    <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
+    <div class="p-[1rem]">
+      <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
     <div class="pb-[100px]">
       <div class="history-container">
         <div v-if="isLoading" v-for="i in 5" class="loader mt-[15px]"></div>
@@ -40,10 +40,11 @@
         </div>
       </div>
     </div>
-    <div
-      class="flex justify-evenly absolute left-0 bottom-0 w-[100%] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
-    >
-      <router-link to="/wallet">
+    </div>
+  <div
+    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+  >
+  <router-link to="/wallet">
         <div class="">
           <svg
             class="ml-[5px]"
@@ -119,10 +120,9 @@
         </div>
       </router-link>
     </div>
-  </div>
   <div
     v-if="showCreateWallet"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] bottom-x rounded-t-[17px] create-wallet-animation    pt-[30px] z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -167,6 +167,7 @@
       </a>
     </div>
   </div>
+    
 </template>
 
 <script>
@@ -228,6 +229,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bottom-s {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.bottom-x {
+   position: fixed;
+   width: inherit;
+    bottom: 0;
+
+}
 @keyframes myAnim {
   0% {
     opacity: 0;
