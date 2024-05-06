@@ -4174,7 +4174,6 @@ export default {
       const washingtonRef = doc(db, "users", this.userWallets.addres);
       const docSnap = await getDoc(washingtonRef);
       const currentBalance = docSnap.data().balance;
-      console.log(docSnap);
       const newBalance = currentBalance + 5;
       await updateDoc(washingtonRef, {
         balance: newBalance,

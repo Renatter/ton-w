@@ -3993,7 +3993,7 @@
   </div>
   <div
     v-if="showInfoWallet"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -4250,7 +4250,6 @@ export default {
       const washingtonRef = doc(db, "users", this.userWallets.addres);
       const docSnap = await getDoc(washingtonRef);
       const currentBalance = docSnap.data().balance;
-      console.log(docSnap);
       const newBalance = currentBalance + 5;
       await updateDoc(washingtonRef, {
         balance: newBalance,

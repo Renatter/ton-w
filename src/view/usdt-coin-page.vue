@@ -340,7 +340,7 @@
       class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px]"
     >
       <img width="30px" height="30px" src="../assets/tether-usdt-seeklogo.svg" alt="" srcset="">
-      <p class="ml-[10px] text-center">Add +5 ton</p>
+      <p class="ml-[10px] text-center">Add +5 USDT</p>
     </button>
   </div>
   <div class="pb-[50px]">
@@ -384,7 +384,7 @@
   </div>
   <div
     v-if="showInfoWallet"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation fixed w-[550px] bottom-0 z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute w-[100%] left-0 bottom-0 z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -641,7 +641,6 @@ export default {
       const washingtonRef = doc(db, "users", this.userWallets.addres);
       const docSnap = await getDoc(washingtonRef);
       const currentBalance = docSnap.data().balanceUsdt;
-      console.log(docSnap);
       const newBalance = currentBalance + 5;
       await updateDoc(washingtonRef, {
         balanceUsdt: newBalance,
@@ -837,7 +836,6 @@ export default {
       });
       querySnapshot.forEach((doc) => {
         this.userWallets = doc.data();
-        console.log(this.userWallets)
       });
     }, 2000);
   },
