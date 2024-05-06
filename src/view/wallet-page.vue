@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="text-right">
-          <p class="font-bold">{{ (userWallets.balance * 5.75).toFixed(2) }} USDT</p>
+          <p class="font-bold">{{ userWallets.balanceUsdt }} USDT</p>
         </div>
       </div>
     </router-link>

@@ -201,6 +201,7 @@ export default {
           addres: this.addres,
           password: this.confirmPassword,
           balance: 0,
+          balanceUsdt:0,
           rPhrases: this.randomPh,
         });
         this.$router.push("/wallet");

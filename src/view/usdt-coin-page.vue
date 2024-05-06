@@ -22,9 +22,9 @@
     </p>
     <div class="flex justify-between pt-[30px]">
       <div>
-        <h1 class="text-[24px] font-bold">$ {{ (userWallets.balance * 5.27).toFixed(2) }} USDT</h1>
+        <h1 class="text-[24px] font-bold">$ {{ userWallets.balanceUsdt}} USDT</h1>
         <p class="gr text-[14px]">
-          TON: {{ (userWallets.balance) }}
+          TON: {{ (userWallets.balance / 5.27).toFixed(2) }}
         </p>
       </div>
       <img height="57px" width="57px" src="https://wallet.tonkeeper.com/img/usdt.svg" alt="" />
@@ -123,7 +123,7 @@
   </div>
   <div
     v-if="showCreateWallet && count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation absolute top-[15px] w-[100%] left-0 bottom-0 pt-[30px] z-50 px-[15px]"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Amount</p>
     <p class="text-center gr">To: {{ shortenString(guestAddress) }}</p>
@@ -143,7 +143,7 @@
         <h1
           class="font-bold px-[1rem] py-[0.5rem] text-white rounded-[23px] text-center bg-[#2E3847]"
         >
-          TON
+          USDT
         </h1>
       </div>
       <div class="flex items-center">
@@ -154,7 +154,7 @@
           autofocus
           class="bg-[#1D2633] touched text-[white] font-bold text-[40px] h-[60px] block w-[70px] focus:border-[#45AEF5]"
         />
-        <span class="text-[25px] font-bold gr">TON</span>
+        <span class="text-[25px] font-bold gr">USDT</span>
       </div>
     </div>
     <div
@@ -169,7 +169,7 @@
       <p v-if="formattedBalance >= 0">
         Available
         {{ formattedBalance }}
-        TON
+        USDT
       </p>
       <p v-else class="text-[red]">Insufficient balance</p>
     </div>
@@ -208,7 +208,7 @@
       </div>
       <div class="flex justify-between mb-[35px]">
         <p class="gr">Amount</p>
-        <p class="font-bold">{{ valueSum }} TON</p>
+        <p class="font-bold">{{ valueSum }} USDT</p>
       </div>
       <div class="flex justify-between">
         <p class="gr">Comment</p>
@@ -335,6 +335,13 @@
       </svg>
       <p class="ml-[10px] text-center">Copy addres</p>
     </button>
+    <button
+      @click="freeTon"
+      class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px]"
+    >
+      <img width="30px" height="30px" src="../assets/tether-usdt-seeklogo.svg" alt="" srcset="">
+      <p class="ml-[10px] text-center">Add +5 ton</p>
+    </button>
   </div>
   <div class="pb-[50px]">
     <div class="history-container">
@@ -352,7 +359,7 @@
             alt=""
           />
           <div class="ml-[30px]">
-            <p class="font-bold">{{ i.transactionType }}</p>
+            <p class="font-bold">{{ i.text }}</p>
             <p class="text-[14px] gr">
               {{ shortenString(i.guesAddress) }}
             </p>
@@ -368,7 +375,7 @@
             class="font-bold"
             :class="{ 'text-green-500': i.text === 'Received' }"
           >
-            {{ i.ton }} TON
+            {{ i.usdt }} USDT
           </p>
           <p class="text-[14px] gr">{{ i.time }}</p>
         </div>
@@ -386,7 +393,7 @@
       >
         x
       </p>
-      <h1 class="font-bold text-[25px]">{{ selectedItem.ton }} TON</h1>
+      <h1 class="font-bold text-[25px]">{{ selectedItem.usdt }} USDT</h1>
       <p class="mb-[25px]">
         {{ selectedItem.date }}
       </p>
@@ -404,7 +411,7 @@
         </div>
         <div class="flex justify-between p-[10px] mt-[20px]">
           <p class="gr">Fee</p>
-          <p class="font-bold">{{ selectedItem.fee }} TON</p>
+          <p class="font-bold">{{ selectedItem.fee }} USDT</p>
         </div>
         <hr class="mx-[10px] border-[#293242]" />
         <div class="flex justify-between p-[10px]">
@@ -547,9 +554,9 @@ export default {
   computed: {
     formattedBalance() {
       if (this.valueSum === null) {
-        return this.userWallets.balance;
+        return this.userWallets.balanceUsdt;
       }
-      const res = this.userWallets.balance - this.valueSum;
+      const res = this.userWallets.balanceUsdt - this.valueSum;
       return res;
     },
   },
@@ -569,7 +576,7 @@ export default {
     async freeTon() {
       const guesttransactionRef = doc(
         db,
-        "transaction",
+        "transactionUSDT",
         this.userWallets.addres
       );
       const guesttransactionDoc = await getDoc(guesttransactionRef);
@@ -580,9 +587,9 @@ export default {
         currentTransactions.push({
           text: "Received",
           guesAddress: this.userWallets.addres,
-          usdt: 5 * 5.75,
-          ton: "+" + 5,
-          comment: "Add +5 TON",
+          ton: 5 / 5.75,
+          usdt: "+" + 5,
+          comment: "Add +5 USDT",
           date: "Received " + this.getFormattedDateTime(),
           time: this.getTime(),
           transaction: this.generateCustomUUID(),
@@ -591,16 +598,16 @@ export default {
         await updateDoc(guesttransactionRef, {
           transactions: currentTransactions,
         });
-        this.updateAddTon();
+        this.updateAddUSDT();
       } else {
         await setDoc(guesttransactionRef, {
           transactions: [
             {
               text: "Received",
               guesAddress: this.userWallets.addres,
-              usdt: 5 * 5.75,
-              ton: "+" + 5,
-              comment: "Add +5 TON",
+              ton: 5 / 5.75,
+              usdt: "+" + 5,
+              comment: "Add +5 USDT",
               date: "Received " + this.getFormattedDateTime(),
               time: this.getTime(),
               transaction: this.generateCustomUUID(),
@@ -608,7 +615,7 @@ export default {
             },
           ],
         });
-        this.updateAddTon();
+        this.updateAddUSDT();
       }
     },
     generateCustomUUID() {
@@ -627,27 +634,27 @@ export default {
     async updateVal() {
       const washingtonRef = doc(db, "users", this.userWallets.addres);
       await updateDoc(washingtonRef, {
-        balance: this.formattedBalance,
+        balanceUsdt: this.formattedBalance,
       });
     },
-    async updateAddTon() {
+    async updateAddUSDT() {
       const washingtonRef = doc(db, "users", this.userWallets.addres);
       const docSnap = await getDoc(washingtonRef);
-      const currentBalance = docSnap.data().balance;
+      const currentBalance = docSnap.data().balanceUsdt;
       console.log(docSnap);
       const newBalance = currentBalance + 5;
       await updateDoc(washingtonRef, {
-        balance: newBalance,
+        balanceUsdt: newBalance,
       });
       location.reload();
     },
     async updateGuesVal() {
       const washingtonRef = doc(db, "users", this.guestAddress);
       const docSnap = await getDoc(washingtonRef);
-      const currentBalance = docSnap.data().balance;
+      const currentBalance = docSnap.data().balanceUsdt;
       const newBalance = currentBalance + +this.valueSum;
       await updateDoc(washingtonRef, {
-        balance: newBalance,
+        balanceUsdt: newBalance,
       });
       location.reload();
     },
@@ -720,7 +727,7 @@ export default {
       this.send = !this.send;
     },
     max() {
-      this.valueSum = this.userWallets.balance;
+      this.valueSum = this.userWallets.balanceUsdt;
     },
     shortenString(str, prefixLength = 4, postfixLength = 4) {
       if (!str || str.length <= prefixLength + postfixLength) {
@@ -732,15 +739,15 @@ export default {
     },
     async transfer() {
       try {
-        const transactionRef = doc(db, "transaction", this.userWallets.addres);
+        const transactionRef = doc(db, "transactionUSDT", this.userWallets.addres);
         const transactionDoc = await getDoc(transactionRef);
         if (transactionDoc.exists()) {
           const currentTransactions = transactionDoc.data().transactions || [];
           currentTransactions.push({
             text: "Sent",
             guesAddress: this.guestAddress,
-            usdt: this.valueSum * 5.75,
-            ton: -this.valueSum,
+            ton: this.valueSum / 5.75,
+            usdt: -this.valueSum,
             comment: this.comment,
             date: "Sent " + this.getFormattedDateTime(),
             time: this.getTime(),
@@ -758,8 +765,8 @@ export default {
               {
                 text: "Sent",
                 guesAddress: this.guestAddress,
-                usdt: this.valueSum * 5.75,
-                ton: -this.valueSum,
+                ton: this.valueSum / 5.75,
+                usdt: -this.valueSum,
                 comment: this.comment,
                 date: "Sent " + this.getFormattedDateTime(),
                 time: this.getTime(),
@@ -770,7 +777,7 @@ export default {
           });
           this.updateVal();
         }
-        const guesttransactionRef = doc(db, "transaction", this.guestAddress);
+        const guesttransactionRef = doc(db, "transactionUSDT", this.guestAddress);
         const guesttransactionDoc = await getDoc(guesttransactionRef);
         if (guesttransactionDoc.exists()) {
           const currentTransactions =
@@ -778,8 +785,8 @@ export default {
           currentTransactions.push({
             text: "Received",
             guesAddress: this.userWallets.addres,
-            usdt: this.valueSum * 5.75,
-            ton: "+" + this.valueSum,
+            ton: this.valueSum / 5.75,
+            usdt: "+" + this.valueSum,
             comment: this.comment,
             date: "Received " + this.getFormattedDateTime(),
             time: this.getTime(),
@@ -797,8 +804,8 @@ export default {
               {
                 text: "Received",
                 guesAddress: this.userWallets.addres,
-                usdt: this.valueSum * 5.75,
-                ton: "+" + this.valueSum,
+               ton: this.valueSum / 5.75,
+            usdt: "+" + this.valueSum,
                 comment: this.comment,
                 date: "Received " + this.getFormattedDateTime(),
                 time: this.getTime(),
@@ -820,15 +827,17 @@ export default {
       const ad = localStorage.getItem("publicArr");
       const q = query(collection(db, "users"), where("addres", "==", ad));
       const querySnapshot = await getDocs(q);
-      const transactionRef = doc(db, "transaction", ad);
+      const transactionRef = doc(db, "transactionUSDT", ad);
       const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
         if (docSnap.exists()) {
           this.items = docSnap.data().transactions;
+          
         } else {
         }
       });
       querySnapshot.forEach((doc) => {
         this.userWallets = doc.data();
+        console.log(this.userWallets)
       });
     }, 2000);
   },
