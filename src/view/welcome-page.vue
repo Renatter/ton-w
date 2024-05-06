@@ -1,6 +1,6 @@
 <template>
   <div class="col relative" v-if="!imports && !passBool">
-    <div class="relative">
+    <div class="relative p-[1rem]">
       <h1 class="text-[32px] font-bold">
         Welcome <br />
         to <span class="text-[#45AEF5]">Tonkeeper</span>
@@ -99,13 +99,13 @@
   </div>
   <div
     v-if="showCreateWallet"
-    class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] left-0 bottom-0 create-wallet-animation absolute w-[100%] p-[1rem] flex flex-col justify-center items-center"
+    class="pt-[20px] mt-[20px] bg-[#10161F] py-[18px] rounded-[17px] left-0 bottom-0 create-wallet-animation absolute w-[100%] p-[1rem] flex flex-col justify-center items-center"
   >
     <!-- Используйте изображение как фоновое изображение -->
     <div class="">
       <p
         @click="showCreateWallet = !showCreateWallet"
-        class="bg-[#1D2633] w-[30px] h-[30px] text-center rounded-full text-[18px] cursor-pointer hover:bg-[#313c4a] top-[20px] absolute right-[10px]"
+        class="bg-[#10161F] w-[30px] h-[30px] text-center rounded-full text-[18px] cursor-pointer hover:bg-[#313c4a] top-[20px] absolute right-[10px]"
       >
         x
       </p>

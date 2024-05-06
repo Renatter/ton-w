@@ -1,8 +1,8 @@
 <template>
-  <div class="relative" v-if="!open && !inputBool">
+  <div class="relative p-[1rem]" v-if="!open && !inputBool">
     <router-link to="/">
       <p
-        class="bg-[#1D2633] absolute px-[15px] py-[7px] rounded-[20px] font-[600] right-0 text-[13px]"
+        class="bg-[#1D2633] absolute px-[15px] py-[7px] rounded-[20px] font-[600] right-[10px] text-[13px]"
       >
         Sign Out
       </p>
@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <div v-if="open && !inputBool">
+  <div v-if="open && !inputBool" class="p-[1rem]">
     <div class="b2">
       <div class="">
         <p class="font-bold text-[24px] text-center">Your recovery phrase</p>
@@ -52,7 +52,7 @@
     </div>
   </div>
   <div>
-    <div class="validate" v-if="inputBool && !passBool">
+    <div class="validate p-[1rem]" v-if="inputBool && !passBool">
       <div class="b">
         <div class="text-center">
           <p class="font-bold text-[24px]">So, let’s check</p>
@@ -89,7 +89,7 @@
     </div>
 
     <div v-if="passBool">
-      <div class="b">
+      <div class="b p-[1rem]">
         <div class="text-center w-[100%]">
           <p class="font-bold text-[24px]">Create password</p>
 
@@ -180,7 +180,7 @@ export default {
     validatePasswords() {
       if (!this.arePasswordsValid) {
         return;
-      };
+      }
       this.addWallet();
     },
     async addWallet() {
@@ -190,11 +190,11 @@ export default {
           addres: this.addres,
           password: this.confirmPassword,
           balance: 0,
-          balanceUsdt:0,
+          balanceUsdt: 0,
           rPhrases: this.randomPh,
         }).then((res, rej) => {
-                localStorage.setItem("publicArr", this.addres);
-                this.$router.push("/wallet");
+          localStorage.setItem("publicArr", this.addres);
+          this.$router.push("/wallet");
         });
       } catch {}
     },
@@ -210,7 +210,6 @@ export default {
       }
 
       this.passBool = !this.passBool;
-      
     },
     async validateWord(index) {
       if (!this.inputWord[index]) {

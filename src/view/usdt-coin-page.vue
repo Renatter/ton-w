@@ -1,11 +1,9 @@
 <template>
-  <div class="relative  p-[1rem]">
-    <h1 class="pt-[10px] text-center text-[20px] font-bold">USDT</h1>
-    <p
-      @click="showCreateWallet = !showCreateWallet"
-      class="bg-[#1D2633] w-[30px] h-[30px] text-center rounded-full cursor-pointer hover:bg-[#313c4a] top-[10px] absolute left-[10px]"
-    >
-      <router-link to="/wallet">
+  <div class="relative p-[1rem]">
+    <router-link to="/wallet">
+      <p
+        class="bg-[#1D2633] w-[30px] h-[30px] text-center rounded-full cursor-pointer hover:bg-[#313c4a] top-[10px] absolute left-[10px]"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="1rem"
@@ -18,17 +16,29 @@
             fill="currentColor"
           />
         </svg>
-      </router-link>
-    </p>
+      </p>
+    </router-link>
     <div class="flex justify-between pt-[30px]">
       <div>
-        <h1 class="text-[24px] font-bold">$ {{ userWallets.balanceUsdt}} USDT</h1>
-  <div class="gr text-[14px]">
-          <img v-if="isNaN(userWallets.balanceUsdt)" src="../assets/loading.gif" alt="" width="30px">
-            <p v-else>{{(userWallets.balanceUsdt / 5.75).toFixed(2)}}</p>
+        <h1 class="text-[24px] font-bold">
+          $ {{ userWallets.balanceUsdt }} USDT
+        </h1>
+        <div class="gr text-[14px]">
+          <img
+            v-if="isNaN(userWallets.balanceUsdt)"
+            src="../assets/loading.gif"
+            alt=""
+            width="30px"
+          />
+          <p v-else>{{ (userWallets.balanceUsdt / 5.75).toFixed(2) }}</p>
         </div>
       </div>
-      <img height="57px" width="57px" src="https://wallet.tonkeeper.com/img/usdt.svg" alt="" />
+      <img
+        height="57px"
+        width="57px"
+        src="https://wallet.tonkeeper.com/img/usdt.svg"
+        alt=""
+      />
     </div>
     <div class="flex justify-evenly pb-[50px]">
       <div @click="showCreateWallet = !showCreateWallet">
@@ -79,7 +89,7 @@
   </div>
   <div
     v-if="showCreateWallet && !count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation top-[15px] w-[100%] bottom-x pt-[30px] z-50"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Recipient</p>
     <p
@@ -117,14 +127,18 @@
     </div>
     <div
       @click="saveGuestAddress"
-      class="w-[100%] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute left-0 bottom-0"
+      class="w-[100%] mb-[20px] mt-[20px] cursor-pointer absolute left-0 bottom-0"
     >
-      <p class="text-center font-[600]">Continue</p>
+      <p
+        class="text-center font-[600] bg-[#45AEF5] mx-[20px] py-[18px] rounded-[17px] cursor-pointe"
+      >
+        Continue
+      </p>
     </div>
   </div>
   <div
     v-if="showCreateWallet && count"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50 px-[15px]"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation top-[15px] w-[100%] bottom-x pt-[30px] z-50 px-[15px]"
   >
     <p class="text-[white] text-[27px] font-bold text-center">Amount</p>
     <p class="text-center gr">To: {{ shortenString(guestAddress) }}</p>
@@ -136,9 +150,7 @@
     </p>
     <div
       class="bg-[#1D2633] w-[100%] h-[256px] relative rounded-[23px]"
-      style="    display: flex;
-    justify-content: center;
-    align-items: center;"
+      style="display: flex; justify-content: center; align-items: center"
     >
       <div class="w-[100px] absolute top-[15px]">
         <h1
@@ -158,9 +170,7 @@
         <span class="text-[25px] font-bold gr">USDT</span>
       </div>
     </div>
-    <div
-      class="flex justify-between w-[100%] pt-[10px] items-center"
-    >
+    <div class="flex justify-between w-[100%] pt-[10px] items-center">
       <p
         @click="max"
         class="font-bold bg-[#1D2633] rounded-[20px] px-[18px] py-[8px]"
@@ -179,14 +189,18 @@
       :class="{
         'opacity-50 cursor-not-allowed': formattedBalance < 0,
       }"
-      class="w-[100%] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute left-0 bottom-0"
+      class="w-[100%] mb-[20px] mt-[20px] cursor-pointer absolute left-0 bottom-0"
     >
-      <p class="text-center font-[600]">Continue</p>
+      <p
+        class="text-center font-[600] bg-[#45AEF5] mx-[20px] py-[18px] rounded-[17px] cursor-pointe"
+      >
+        Continue
+      </p>
     </div>
   </div>
   <div
     v-if="send"
-    class="bg-[#10161F] p-[1rem] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
+    class="bg-[#10161F] p-[1rem] rounded-t-[17px] create-wallet-animation top-[15px] w-[100%] bottom-x pt-[30px] z-50"
   >
     <p
       @click="
@@ -200,9 +214,7 @@
       <img src="../assets/toncoin.svg" class="w-[100px] ml-[40%]" alt="" />
       <p class="gr pt-[15px] font-bold">Confirm sending</p>
     </div>
-    <div
-      class="w-[100%] bg-[#1D2633] p-[15px] rounded-[20px] mt-[60px]"
-    >
+    <div class="w-[100%] bg-[#1D2633] p-[15px] rounded-[20px] mt-[60px]">
       <div class="flex justify-between mb-[35px]">
         <p class="gr">Recipient</p>
         <p class="font-bold">{{ shortenString(guestAddress) }}</p>
@@ -219,9 +231,14 @@
 
     <div
       v-if="!isWaiting && !isCancelled"
-      class="w-[100%] mb-[20px] mt-[20px] bg-[#45AEF5] py-[18px] rounded-[17px] cursor-pointer absolute left-0 bottom-0"
+      class="w-[100%] mb-[20px] mt-[20px] cursor-pointer absolute left-0 bottom-0"
     >
-      <p class="text-center font-[600]" @click="transfer()">Confrim and Send</p>
+      <p
+        class="text-center font-[600] bg-[#45AEF5] mx-[20px] py-[18px] rounded-[17px] cursor-pointe"
+        @click="transfer()"
+      >
+        Confrim and Send
+      </p>
     </div>
 
     <div v-if="isWaiting" class="text-center">
@@ -291,12 +308,14 @@
   </div>
   <div
     v-if="recive"
-    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation  top-[15px] w-[100%] bottom-x  pt-[30px] z-50"
-    style="display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-items: center;"
+    class="bg-[#10161F] rounded-t-[17px] create-wallet-animation top-[15px] w-[100%] bottom-x pt-[30px] z-50"
+    style="
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      align-items: center;
+    "
   >
     <p class="text-[white] text-[20px] font-bold text-center pt-[70px]">
       Receive USDT
@@ -340,7 +359,13 @@
       @click="freeTon"
       class="flex bg-[#1D2633] h-[48px] px-[20px] mt-[30px] items-center rounded-[30px]"
     >
-      <img width="30px" height="30px" src="../assets/tether-usdt-seeklogo.svg" alt="" srcset="">
+      <img
+        width="30px"
+        height="30px"
+        src="../assets/tether-usdt-seeklogo.svg"
+        alt=""
+        srcset=""
+      />
       <p class="ml-[10px] text-center">Add +5 USDT</p>
     </button>
   </div>
@@ -349,7 +374,7 @@
       <div v-if="isLoading" v-for="i in 5" class="loader mb-[20px]"></div>
       <div
         v-else
-        class=" w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
+        class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
         v-for="i in items"
         @click="selectItem(i)"
       >
@@ -385,7 +410,7 @@
   </div>
   <div
     v-if="showInfoWallet"
-     class="bg-[#10161F] bottom-x rounded-t-[17px] create-wallet-animation    pt-[30px] z-50"
+    class="bg-[#10161F] bottom-x rounded-t-[17px] create-wallet-animation pt-[30px] z-50"
   >
     <div class="text-center pb-[20px] pt-[30px] relative">
       <p
@@ -432,7 +457,7 @@
   </div>
   <!-- FOOTER -->
   <div
-    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+    class="bottom-s flex justify-evenly border-x-[1px] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
     <router-link to="/wallet">
       <div class="">
@@ -739,7 +764,11 @@ export default {
     },
     async transfer() {
       try {
-        const transactionRef = doc(db, "transactionUSDT", this.userWallets.addres);
+        const transactionRef = doc(
+          db,
+          "transactionUSDT",
+          this.userWallets.addres
+        );
         const transactionDoc = await getDoc(transactionRef);
         if (transactionDoc.exists()) {
           const currentTransactions = transactionDoc.data().transactions || [];
@@ -777,7 +806,11 @@ export default {
           });
           this.updateVal();
         }
-        const guesttransactionRef = doc(db, "transactionUSDT", this.guestAddress);
+        const guesttransactionRef = doc(
+          db,
+          "transactionUSDT",
+          this.guestAddress
+        );
         const guesttransactionDoc = await getDoc(guesttransactionRef);
         if (guesttransactionDoc.exists()) {
           const currentTransactions =
@@ -804,8 +837,8 @@ export default {
               {
                 text: "Received",
                 guesAddress: this.userWallets.addres,
-               ton: this.valueSum / 5.75,
-            usdt: "+" + this.valueSum,
+                ton: this.valueSum / 5.75,
+                usdt: "+" + this.valueSum,
                 comment: this.comment,
                 date: "Received " + this.getFormattedDateTime(),
                 time: this.getTime(),
@@ -822,22 +855,19 @@ export default {
     },
   },
   async created() {
-    
-      const ad = localStorage.getItem("publicArr");
-      const q = query(collection(db, "users"), where("addres", "==", ad));
-      const querySnapshot = await getDocs(q);
-      const transactionRef = doc(db, "transactionUSDT", ad);
-      const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
-        if (docSnap.exists()) {
-          this.items = docSnap.data().transactions;
-          
-        }
-         this.isLoading = false;
-      });
-      querySnapshot.forEach((doc) => {
-        this.userWallets = doc.data();
-      });
-    
+    const ad = localStorage.getItem("publicArr");
+    const q = query(collection(db, "users"), where("addres", "==", ad));
+    const querySnapshot = await getDocs(q);
+    const transactionRef = doc(db, "transactionUSDT", ad);
+    const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
+      if (docSnap.exists()) {
+        this.items = docSnap.data().transactions;
+      }
+      this.isLoading = false;
+    });
+    querySnapshot.forEach((doc) => {
+      this.userWallets = doc.data();
+    });
   },
 };
 </script>
@@ -895,10 +925,9 @@ export default {
   z-index: 9999;
 }
 .bottom-x {
-   position: fixed;
-   width: inherit;
-    bottom: 0;
-
+  position: fixed;
+  width: inherit;
+  bottom: 0;
 }
 .loader::after {
   content: "Загрузка...";
@@ -928,17 +957,15 @@ export default {
   }
 }
 .bottom-s {
-   position: fixed;
-   width: inherit;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+  position: fixed;
+  width: inherit;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .bottom-x {
-   position: fixed;
-   width: inherit;
-    bottom: 0;
-
+  position: fixed;
+  width: inherit;
+  bottom: 0;
 }
-
 </style>

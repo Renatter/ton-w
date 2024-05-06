@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-[150px] relative">
+  <div class="pt-[150px] relative p-[1rem]">
     <p
       @click="showCreateWallet = !showCreateWallet"
       class="bg-[#1D2633] w-[30px] h-[30px] text-center rounded-full cursor-pointer hover:bg-[#313c4a] top-[30px] absolute left-[20px]"
@@ -30,8 +30,8 @@
       </span>
     </div>
   </div>
- <div
-    class="bottom-s flex justify-evenly border-x-[1px]  bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
+  <div
+    class="bottom-s flex justify-evenly border-x-[1px] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
     <router-link to="/wallet">
       <div class="">
@@ -156,10 +156,10 @@ export default {
   white-space: normal;
 }
 .bottom-s {
-   position: fixed;
-   width: inherit;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+  position: fixed;
+  width: inherit;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
