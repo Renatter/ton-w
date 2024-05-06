@@ -177,7 +177,7 @@
     </div>
   </div>
   <div v-if="passBool">
-    <div class="b">
+    <div class="b p-[1rem]">
       <div class="text-center w-[100%]">
         <p class="font-bold text-[24px]">Create password</p>
 

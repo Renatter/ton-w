@@ -3982,7 +3982,7 @@
             alt=""
           />
           <div class="ml-[30px]">
-            <p class="font-bold">{{ i.transactionType }}</p>
+            <p class="font-bold">{{ i.text }}</p>
             <p class="text-[14px] gr">
               {{ shortenString(i.guesAddress) }}
             </p>
