@@ -37,7 +37,11 @@ export default {
   width: 550px;
   border-left: 1px solid #4f5a703d;
   border-right: 1px solid rgba(79, 90, 112, 0.24);
-
+}
+@media (max-width: 550px) {
+  .container {
+    width: 100%;
+  }
 }
 .dead {
       display: block;
