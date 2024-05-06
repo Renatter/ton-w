@@ -1,4 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory
+} from 'vue-router';
 import WlecomePage from './view/welcome-page.vue';
 import CreatePage from './view/create-page.vue';
 import WalletPage from './view/wallet-page.vue';
@@ -10,8 +13,7 @@ import RecoveryPage from './view/recovery-page.vue';
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
+  routes: [{
       path: '/',
       redirect: '/welcome',
     },
@@ -52,9 +54,15 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-  let hasPublickAr = localStorage.getItem('publicArr');
-  if (hasPublickAr === null && ['/wallet', '/history', '/recovery', '/settings', '/usdt-coin', '/ton-coin'].includes(to.path)) {
-    next({path: '/welcome'});
+  let hasPublicKey = localStorage.getItem('publicArr');
+  if (!hasPublicKey && ['/wallet', '/history', '/recovery', '/settings', '/usdt-coin', '/ton-coin'].includes(to.path)) {
+    next({
+      path: '/welcome'
+    });
+  } else if (hasPublicKey && to.path === '/welcome' || hasPublicKey && to.path === '/create') {
+    next({
+      path: '/wallet'
+    });
   } else {
     next();
   }
