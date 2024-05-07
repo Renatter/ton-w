@@ -1,102 +1,53 @@
 <template>
   <div class="p-[1rem]">
-    <h1 class="text-[30px] font-bold mb-[15px]">History {{ activeTab }}</h1>
-    <div class="flex">
-      <p
-        class="bg-[#1D2633] w-[60px] text-[13px] text-center p-[5px] rounded-[20px] font-bold"
-        :class="{ active: activeTab === 'TON' }"
-        @click="setActiveTab('TON')"
+    <h1 class="text-[30px] font-bold mb-[15px]">History</h1>
+    <div class="history-container pb-[40px]">
+      <div v-if="isLoading" v-for="i in 5" class="loader mt-[15px]"></div>
+      <div
+        v-else
+        class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
+        v-for="i in itemsTon"
+        @click="selectItem(i)"
       >
-        TON
-      </p>
-      <p
-        class="bg-[#1D2633] w-[60px] text-[13px] text-center p-[5px] rounded-[20px] font-bold ml-[15px]"
-        :class="{ active: activeTab === 'USDT' }"
-        @click="setActiveTab('USDT')"
-      >
-        USDT
-      </p>
-    </div>
-    <div v-if="activeTab === 'TON'" class="pb-[100px] mt-[20px]">
-      <div class="history-container">
-        <div v-if="isLoading" v-for="i in 5" class="loader mt-[15px]"></div>
-        <div
-          v-else
-          class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
-          v-for="i in itemsTon"
-          @click="selectItem(i)"
-        >
-          <div class="flex">
-            <img
-              src="../assets/history-icon.png"
-              class="w-[50px] h-[50px] rounded-full"
-              alt=""
-            />
-            <div class="ml-[30px]">
-              <p class="font-bold">{{ i.text }}</p>
-              <p class="text-[14px] gr">
-                {{ shortenString(i.guesAddress) }}
-              </p>
-              <p
-                class="bg-[#2E3847] text-center text-[14px] rounded-[25px] py-[8px] px-[10px] mt-[10px]"
-              >
-                {{ i.comment }}
-              </p>
-            </div>
-          </div>
-          <div class="text-right">
-            <p
-              class="font-bold"
-              :class="{ 'text-green-500': i.text === 'Received' }"
-            >
-              {{ i.ton }} TON
+        <div class="flex">
+          <img
+            src="../assets/history-icon.png"
+            class="w-[50px] h-[50px] rounded-full"
+            alt=""
+          />
+          <div class="ml-[30px]">
+            <p class="font-bold">{{ i.text }}</p>
+            <p class="text-[14px] gr">
+              {{ shortenString(i.guesAddress) }}
             </p>
-            <p class="text-[14px] gr">{{ i.time }}</p>
+            <p
+              class="bg-[#2E3847] text-center text-[14px] rounded-[25px] py-[8px] px-[10px] mt-[10px]"
+            >
+              {{ i.comment }}
+            </p>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div v-if="activeTab === 'USDT'" class="pb-[100px] mt-[20px]">
-      <div class="history-container">
-        <div v-if="isLoading" v-for="i in 5" class="loader mt-[15px]"></div>
-        <div
-          v-else
-          class="w-[100%] bg-[#1D2633] rounded-[15px] flex justify-between p-[15px] b-[0] hover:bg-[#2E3847] cursor-pointer mb-[15px]"
-          v-for="i in itemsUsdt"
-          @click="selectItem(i)"
-        >
-          <div class="flex">
-            <img
-              src="../assets/history-icon.png"
-              class="w-[50px] h-[50px] rounded-full"
-              alt=""
-            />
-            <div class="ml-[30px]">
-              <p class="font-bold">{{ i.text }}</p>
-              <p class="text-[14px] gr">
-                {{ shortenString(i.guesAddress) }}
-              </p>
-              <p
-                class="bg-[#2E3847] text-center text-[14px] rounded-[25px] py-[8px] px-[10px] mt-[10px]"
-              >
-                {{ i.comment }}
-              </p>
-            </div>
-          </div>
-          <div class="text-right">
-            <p
-              class="font-bold"
-              :class="{ 'text-green-500': i.text === 'Received' }"
-            >
-              {{ i.usdt }} TON
-            </p>
-            <p class="text-[14px] gr">{{ i.time }}</p>
-          </div>
+        <div class="text-right">
+          <p
+            v-if="i.transfer === 'ton'"
+            class="font-bold"
+            :class="{ 'text-green-500': i.text === 'Received' }"
+          >
+            {{ i.ton }}
+          </p>
+          <p
+            v-if="i.transfer === 'usdt'"
+            class="font-bold"
+            :class="{ 'text-green-500': i.text === 'Received' }"
+          >
+            {{ i.usdt }}
+          </p>
+          <p class="text-[14px] gr">{{ i.time }}</p>
         </div>
       </div>
     </div>
   </div>
+
   <div
     class="bottom-s flex justify-evenly border-x-[1px] bg-[#0B0F16] pb-[10px] border-t-[1px] border-[#4f5a703d] pt-[10px]"
   >
@@ -188,7 +139,12 @@
       >
         x
       </p>
-      <h1 class="font-bold text-[25px]">{{ selectedItem.usdt }} USDT</h1>
+      <h1 v-if="selectedItem.transfer === 'usdt'" class="font-bold text-[25px]">
+        {{ selectedItem.usdt }}
+      </h1>
+      <h1 v-if="selectedItem.transfer === 'ton'" class="font-bold text-[25px]">
+        {{ selectedItem.ton }}
+      </h1>
       <p class="mb-[25px]">
         {{ selectedItem.date }}
       </p>
@@ -206,7 +162,12 @@
         </div>
         <div class="flex justify-between p-[10px] mt-[20px]">
           <p class="gr">Fee</p>
-          <p class="font-bold">{{ selectedItem.fee }} TON</p>
+          <p v-if="selectedItem.transfer === 'ton'" class="font-bold">
+            {{ selectedItem.fee }} TON
+          </p>
+          <p v-if="selectedItem.transfer === 'usdt'" class="font-bold">
+            {{ selectedItem.fee }} USDT
+          </p>
         </div>
         <hr class="mx-[10px] border-[#293242]" />
         <div class="flex justify-between p-[10px]">
@@ -277,14 +238,7 @@ export default {
     const transactionUSD = doc(db, "transactionUSDT", ad);
     const unsubscribeTON = onSnapshot(transactionTON, (docSnap) => {
       if (docSnap.exists()) {
-        this.itemsTon = docSnap.data().transactions;
-      }
-      this.isLoading = false;
-    });
-    const unsubscribeUSDT = onSnapshot(transactionUSD, (docSnap) => {
-      if (docSnap.exists()) {
-        this.itemsUsdt = docSnap.data().transactions;
-        console.log(this.itemsUsdt);
+        this.itemsTon = docSnap.data().transactions.reverse();
       }
       this.isLoading = false;
     });

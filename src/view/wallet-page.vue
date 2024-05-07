@@ -11,7 +11,12 @@
           alt=""
           width="50px"
         />
-        <p v-else>$ {{ (userWallets.balance * 5.75).toFixed(2) }}</p>
+        <p v-else>
+          $
+          {{
+            (userWallets.balance * 5.75 + userWallets.balanceUsdt).toFixed(2)
+          }}
+        </p>
       </h1>
       <p class="gr font-bold text-[14px]">
         {{ shortenString(userWallets.addres) }}
@@ -4147,12 +4152,13 @@ export default {
           text: "Received",
           guesAddress: this.userWallets.addres,
           usdt: 5 * 5.75,
-          ton: "+" + 5,
+          ton: "+" + 5 + " TON",
           comment: "Add +5 TON",
           date: "Received " + this.getFormattedDateTime(),
           time: this.getTime(),
           transaction: this.generateCustomUUID(),
           fee: 0,
+          transfer: "ton",
         });
         await updateDoc(guesttransactionRef, {
           transactions: currentTransactions,
@@ -4171,6 +4177,7 @@ export default {
               time: this.getTime(),
               transaction: this.generateCustomUUID(),
               fee: 0,
+              transfer: "ton",
             },
           ],
         });
@@ -4305,12 +4312,13 @@ export default {
             text: "Sent",
             guesAddress: this.guestAddress,
             usdt: this.valueSum * 5.75,
-            ton: -this.valueSum,
+            ton: -this.valueSum + " TON",
             comment: this.comment,
             date: "Sent " + this.getFormattedDateTime(),
             time: this.getTime(),
             transaction: this.generateCustomUUID(),
             fee: 0.1,
+            transfer: "ton",
           });
 
           await updateDoc(transactionRef, {
@@ -4324,12 +4332,13 @@ export default {
                 text: "Sent",
                 guesAddress: this.guestAddress,
                 usdt: this.valueSum * 5.75,
-                ton: -this.valueSum,
+                ton: -this.valueSum + " TON",
                 comment: this.comment,
                 date: "Sent " + this.getFormattedDateTime(),
                 time: this.getTime(),
                 transaction: this.generateCustomUUID(),
                 fee: 0.1,
+                transfer: "ton",
               },
             ],
           });
@@ -4344,12 +4353,13 @@ export default {
             text: "Received",
             guesAddress: this.userWallets.addres,
             usdt: this.valueSum * 5.75,
-            ton: "+" + this.valueSum,
+            ton: "+" + this.valueSum + " TON",
             comment: this.comment,
             date: "Received " + this.getFormattedDateTime(),
             time: this.getTime(),
             transaction: this.generateCustomUUID(),
             fee: 0.1,
+            transfer: "ton",
           });
 
           await updateDoc(guesttransactionRef, {
@@ -4363,12 +4373,13 @@ export default {
                 text: "Received",
                 guesAddress: this.userWallets.addres,
                 usdt: this.valueSum * 5.75,
-                ton: "+" + this.valueSum,
+                ton: "+" + this.valueSum + " TON",
                 comment: this.comment,
                 date: "Received " + this.getFormattedDateTime(),
                 time: this.getTime(),
                 transaction: this.generateCustomUUID(),
                 fee: 0.1,
+                transfer: "ton",
               },
             ],
           });

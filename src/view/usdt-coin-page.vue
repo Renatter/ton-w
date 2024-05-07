@@ -211,7 +211,11 @@
       x
     </p>
     <div class="text-center">
-      <img src="../assets/toncoin.svg" class="w-[100px] ml-[40%]" alt="" />
+      <img
+        src="../assets/tether-usdt-seeklogo.svg"
+        class="w-[100px] ml-[40%]"
+        alt=""
+      />
       <p class="gr pt-[15px] font-bold">Confirm sending</p>
     </div>
     <div class="w-[100%] bg-[#1D2633] p-[15px] rounded-[20px] mt-[60px]">
@@ -401,7 +405,7 @@
             class="font-bold"
             :class="{ 'text-green-500': i.text === 'Received' }"
           >
-            {{ i.usdt }} USDT
+            {{ i.usdt }}
           </p>
           <p class="text-[14px] gr">{{ i.time }}</p>
         </div>
@@ -419,7 +423,7 @@
       >
         x
       </p>
-      <h1 class="font-bold text-[25px]">{{ selectedItem.usdt }} USDT</h1>
+      <h1 class="font-bold text-[25px]">{{ selectedItem.usdt }}</h1>
       <p class="mb-[25px]">
         {{ selectedItem.date }}
       </p>
@@ -437,7 +441,7 @@
         </div>
         <div class="flex justify-between p-[10px] mt-[20px]">
           <p class="gr">Fee</p>
-          <p class="font-bold">{{ selectedItem.fee }} USDT</p>
+          <p class="font-bold">{{ selectedItem.fee }}</p>
         </div>
         <hr class="mx-[10px] border-[#293242]" />
         <div class="flex justify-between p-[10px]">
@@ -600,48 +604,49 @@ export default {
       return `${prefix}...${postfix}`;
     },
     async freeTon() {
-      const guesttransactionRef = doc(
-        db,
-        "transactionUSDT",
-        this.userWallets.addres
-      );
-      const guesttransactionDoc = await getDoc(guesttransactionRef);
-      if (guesttransactionDoc.exists()) {
+      const userAddress = this.userWallets.addres;
+
+      // Добавляем транзакцию в базу "transactionUSDT"
+      const usdtTransactionRef = doc(db, "transactionUSDT", userAddress);
+      await this.addTransaction(usdtTransactionRef, {
+        text: "Received",
+        guesAddress: userAddress,
+        ton: 5 / 5.75,
+        usdt: "+" + 5 + "USDT",
+        comment: "Add +5 USDT",
+        date: "Received " + this.getFormattedDateTime(),
+        time: this.getTime(),
+        transaction: this.generateCustomUUID(),
+        fee: 0,
+        transfer: "usdt",
+      });
+
+      // Добавляем транзакцию в базу "transaction"
+      const tonTransactionRef = doc(db, "transaction", userAddress);
+      await this.addTransaction(tonTransactionRef, {
+        text: "Received",
+        guesAddress: userAddress,
+        ton: 5 / 5.75,
+        usdt: "+" + 5 + "USDT",
+        comment: "Add +5 USDT",
+        date: "Received " + this.getFormattedDateTime(),
+        time: this.getTime(),
+        transaction: this.generateCustomUUID(),
+        fee: 0,
+        transfer: "usdt",
+      });
+      this.updateAddUSDT();
+    },
+
+    async addTransaction(transactionRef, transactionData) {
+      const transactionDoc = await getDoc(transactionRef);
+      if (transactionDoc.exists()) {
         // Если документ уже существует, получаем его текущие данные
-        const currentTransactions =
-          guesttransactionDoc.data().transactions || [];
-        currentTransactions.push({
-          text: "Received",
-          guesAddress: this.userWallets.addres,
-          ton: 5 / 5.75,
-          usdt: "+" + 5,
-          comment: "Add +5 USDT",
-          date: "Received " + this.getFormattedDateTime(),
-          time: this.getTime(),
-          transaction: this.generateCustomUUID(),
-          fee: 0,
-        });
-        await updateDoc(guesttransactionRef, {
-          transactions: currentTransactions,
-        });
-        this.updateAddUSDT();
+        const currentTransactions = transactionDoc.data().transactions || [];
+        currentTransactions.push(transactionData);
+        await updateDoc(transactionRef, { transactions: currentTransactions });
       } else {
-        await setDoc(guesttransactionRef, {
-          transactions: [
-            {
-              text: "Received",
-              guesAddress: this.userWallets.addres,
-              ton: 5 / 5.75,
-              usdt: "+" + 5,
-              comment: "Add +5 USDT",
-              date: "Received " + this.getFormattedDateTime(),
-              time: this.getTime(),
-              transaction: this.generateCustomUUID(),
-              fee: 0,
-            },
-          ],
-        });
-        this.updateAddUSDT();
+        await setDoc(transactionRef, { transactions: [transactionData] });
       }
     },
     generateCustomUUID() {
@@ -763,96 +768,75 @@ export default {
       return `${prefix}...${postfix}`;
     },
     async transfer() {
-      try {
-        const transactionRef = doc(
-          db,
-          "transactionUSDT",
-          this.userWallets.addres
-        );
-        const transactionDoc = await getDoc(transactionRef);
-        if (transactionDoc.exists()) {
-          const currentTransactions = transactionDoc.data().transactions || [];
-          currentTransactions.push({
-            text: "Sent",
-            guesAddress: this.guestAddress,
-            ton: this.valueSum / 5.75,
-            usdt: -this.valueSum,
-            comment: this.comment,
-            date: "Sent " + this.getFormattedDateTime(),
-            time: this.getTime(),
-            transaction: this.generateCustomUUID(),
-            fee: 0.1,
-          });
+      const userAddress = this.userWallets.addres;
 
-          await updateDoc(transactionRef, {
-            transactions: currentTransactions,
-          });
-          this.updateVal();
-        } else {
-          await setDoc(transactionRef, {
-            transactions: [
-              {
-                text: "Sent",
-                guesAddress: this.guestAddress,
-                ton: this.valueSum / 5.75,
-                usdt: -this.valueSum,
-                comment: this.comment,
-                date: "Sent " + this.getFormattedDateTime(),
-                time: this.getTime(),
-                transaction: this.generateCustomUUID(),
-                fee: 0.1,
-              },
-            ],
-          });
-          this.updateVal();
-        }
-        const guesttransactionRef = doc(
-          db,
-          "transactionUSDT",
-          this.guestAddress
-        );
-        const guesttransactionDoc = await getDoc(guesttransactionRef);
-        if (guesttransactionDoc.exists()) {
-          const currentTransactions =
-            guesttransactionDoc.data().transactions || [];
-          currentTransactions.push({
-            text: "Received",
-            guesAddress: this.userWallets.addres,
-            ton: this.valueSum / 5.75,
-            usdt: "+" + this.valueSum,
-            comment: this.comment,
-            date: "Received " + this.getFormattedDateTime(),
-            time: this.getTime(),
-            transaction: this.generateCustomUUID(),
-            fee: 0.1,
-          });
+      const usdtTransactionRef = doc(db, "transactionUSDT", userAddress);
+      await this.addTransaction(usdtTransactionRef, {
+        text: "Sent",
+        guesAddress: this.guestAddress,
+        ton: this.valueSum / 5.75,
+        usdt: -this.valueSum + " USDT",
+        comment: this.comment,
+        date: "Sent " + this.getFormattedDateTime(),
+        time: this.getTime(),
+        transaction: this.generateCustomUUID(),
+        fee: 0.1,
+        transfer: "usdt",
+      });
+      const tonTransactionRef = doc(db, "transaction", userAddress);
+      await this.addTransaction(tonTransactionRef, {
+        text: "Sent",
+        guesAddress: this.guestAddress,
+        ton: this.valueSum / 5.75,
+        usdt: -this.valueSum + " USDT",
+        comment: this.comment,
+        date: "Sent " + this.getFormattedDateTime(),
+        time: this.getTime(),
+        transaction: this.generateCustomUUID(),
+        fee: 0.1,
+        transfer: "usdt",
+      });
+      this.updateVal();
 
-          await updateDoc(guesttransactionRef, {
-            transactions: currentTransactions,
-          });
-          this.updateGuesVal();
-        } else {
-          await setDoc(guesttransactionRef, {
-            transactions: [
-              {
-                text: "Received",
-                guesAddress: this.userWallets.addres,
-                ton: this.valueSum / 5.75,
-                usdt: "+" + this.valueSum,
-                comment: this.comment,
-                date: "Received " + this.getFormattedDateTime(),
-                time: this.getTime(),
-                transaction: this.generateCustomUUID(),
-                fee: 0.1,
-              },
-            ],
-          });
-          this.updateGuesVal();
-        }
-      } catch (error) {
-        console.error("Error adding transaction: ", error);
-      }
+      const GusdtTransactionRef = doc(db, "transactionUSDT", this.guestAddress);
+      await this.addTransaction(GusdtTransactionRef, {
+        text: "Received",
+        guesAddress: this.userWallets.addres,
+        ton: this.valueSum / 5.75,
+        usdt: "+" + this.valueSum + " USDT",
+        comment: this.comment,
+        date: "Received " + this.getFormattedDateTime(),
+        time: this.getTime(),
+        transaction: this.generateCustomUUID(),
+        fee: 0.1,
+        transfer: "usdt",
+      });
+      const GtonTransactionRef = doc(db, "transaction", this.guestAddress);
+      await this.addTransaction(GtonTransactionRef, {
+        text: "Received",
+        guesAddress: this.userWallets.addres,
+        ton: this.valueSum / 5.75,
+        usdt: "+" + this.valueSum + " USDT",
+        comment: this.comment,
+        date: "Received " + this.getFormattedDateTime(),
+        time: this.getTime(),
+        transaction: this.generateCustomUUID(),
+        fee: 0.1,
+        transfer: "usdt",
+      });
+      this.updateGuesVal();
     },
+  },
+  async addTransaction(transactionRef, transactionData) {
+    const transactionDoc = await getDoc(transactionRef);
+    if (transactionDoc.exists()) {
+      // Если документ уже существует, получаем его текущие данные
+      const currentTransactions = transactionDoc.data().transactions || [];
+      currentTransactions.push(transactionData);
+      await updateDoc(transactionRef, { transactions: currentTransactions });
+    } else {
+      await setDoc(transactionRef, { transactions: [transactionData] });
+    }
   },
   async created() {
     const ad = localStorage.getItem("publicArr");
@@ -861,7 +845,7 @@ export default {
     const transactionRef = doc(db, "transactionUSDT", ad);
     const unsubscribeCart = onSnapshot(transactionRef, (docSnap) => {
       if (docSnap.exists()) {
-        this.items = docSnap.data().transactions;
+        this.items = docSnap.data().transactions.reverse();
       }
       this.isLoading = false;
     });
