@@ -205,7 +205,6 @@ export default {
     },
     validateInputs() {
       if (this.inputWord.every((word) => !word.trim())) {
-        // Если все вводы пусты, ничего не делаем
         return;
       }
 
@@ -229,7 +228,7 @@ export default {
       for (let i = 0; i < 3; i++) {
         const randomIndex = Math.floor(Math.random() * tempArray.length);
         const wordObject = {
-          index: this.randomPh.indexOf(tempArray[randomIndex]), // Используем indexOf для определения индекса
+          index: this.randomPh.indexOf(tempArray[randomIndex]),
           text: tempArray[randomIndex],
         };
         this.selectedWords.push(wordObject);
