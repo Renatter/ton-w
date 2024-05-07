@@ -598,7 +598,6 @@ export default {
       );
       const guesttransactionDoc = await getDoc(guesttransactionRef);
       if (guesttransactionDoc.exists()) {
-        // Если документ уже существует, получаем его текущие данные
         const currentTransactions =
           guesttransactionDoc.data().transactions || [];
         currentTransactions.push({

@@ -101,7 +101,6 @@
     v-if="showCreateWallet"
     class="pt-[20px] mt-[20px] bg-[#10161F] py-[18px] rounded-[17px] left-0 bottom-0 create-wallet-animation absolute w-[100%] p-[1rem] flex flex-col justify-center items-center"
   >
-    <!-- Используйте изображение как фоновое изображение -->
     <div class="">
       <p
         @click="showCreateWallet = !showCreateWallet"
@@ -142,7 +141,6 @@
     v-if="imports && !passBool"
     class="pt-[20px] mt-[20px] bg-[#0c1014] py-[18px] rounded-[17px] bottom-0 create-wallet-animation left-0 top-0 absolute w-[100%] p-[1rem] flex flex-col justify-center items-center"
   >
-    <!-- Используйте изображение как фоновое изображение -->
     <div class="">
       <p
         @click="(imports = !imports), (showCreateWallet = !showCreateWallet)"

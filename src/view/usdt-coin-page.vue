@@ -606,7 +606,6 @@ export default {
     async freeTon() {
       const userAddress = this.userWallets.addres;
 
-      // Добавляем транзакцию в базу "transactionUSDT"
       const usdtTransactionRef = doc(db, "transactionUSDT", userAddress);
       await this.addTransaction(usdtTransactionRef, {
         text: "Received",
@@ -621,7 +620,6 @@ export default {
         transfer: "usdt",
       });
 
-      // Добавляем транзакцию в базу "transaction"
       const tonTransactionRef = doc(db, "transaction", userAddress);
       await this.addTransaction(tonTransactionRef, {
         text: "Received",
@@ -641,7 +639,6 @@ export default {
     async addTransaction(transactionRef, transactionData) {
       const transactionDoc = await getDoc(transactionRef);
       if (transactionDoc.exists()) {
-        // Если документ уже существует, получаем его текущие данные
         const currentTransactions = transactionDoc.data().transactions || [];
         currentTransactions.push(transactionData);
         await updateDoc(transactionRef, { transactions: currentTransactions });
@@ -830,7 +827,6 @@ export default {
   async addTransaction(transactionRef, transactionData) {
     const transactionDoc = await getDoc(transactionRef);
     if (transactionDoc.exists()) {
-      // Если документ уже существует, получаем его текущие данные
       const currentTransactions = transactionDoc.data().transactions || [];
       currentTransactions.push(transactionData);
       await updateDoc(transactionRef, { transactions: currentTransactions });

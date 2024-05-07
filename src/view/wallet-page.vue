@@ -4171,7 +4171,7 @@ export default {
               text: "Received",
               guesAddress: this.userWallets.addres,
               usdt: 5 * 5.75,
-              ton: "+" + 5,
+              ton: "+" + 5 + "TON",
               comment: "Add +5 TON",
               date: "Received " + this.getFormattedDateTime(),
               time: this.getTime(),
